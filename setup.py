@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1'
+version = '0.2'
 
 setup(
 	name='ckanext-datajson',
@@ -24,9 +24,9 @@ setup(
 	],
 	entry_points=\
 	"""
-        [ckan.plugins]
-    datajson=ckanext.datajson.plugin:DataJsonPlugin
-    datajson_harvest=ckanext.datajson.harvester_datajson:DataJsonHarvester
-    cmsdatanav_harvest=ckanext.datajson.harvester_cmsdatanavigator:CmsDataNavigatorHarvester
+	[ckan.plugins]
+	datajson=ckanext.datajson.plugin:DataJsonPlugin
+	datajson_harvest=ckanext.datajson.harvester_datajson:DataJsonHarvester
+	cmsdatanav_harvest=ckanext.datajson.harvester_cmsdatanavigator:CmsDataNavigatorHarvester
 	""",
 )
