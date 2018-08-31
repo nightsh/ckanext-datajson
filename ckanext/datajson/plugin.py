@@ -386,7 +386,7 @@ class DataJsonController(BaseController):
 
             if body:
                 try:
-                    do_validation(body, c.errors)
+                    do_validation([dict(body)], c.errors, None)
                 except Exception as e:
                     c.errors.append(("Internal Error", ["Something bad happened: " + unicode(e)]))
                 if len(c.errors) == 0:
