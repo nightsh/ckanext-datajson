@@ -22,7 +22,6 @@
       "default": "public"
     },
     "identifier": {
-      "extra": true,
       "field": "identifier"
     },
     "dataQuality": {

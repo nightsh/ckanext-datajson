@@ -160,7 +160,6 @@ class DataJsonController(BaseController):
         #         ("foaf:homepage", DataJsonPlugin.site_url),
         #         ("dcat:dataset", [dataset_to_jsonld(d) for d in data.get('dataset')]),
         #     ])
-
         return p.toolkit.literal(json.dumps(data, indent=2))
 
     def make_json(self, export_type='datajson', owner_org=None):
@@ -258,7 +257,6 @@ class DataJsonController(BaseController):
             exc_type, exc_obj, exc_tb = sys.exc_info()
             filename = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             logger.error("%s : %s : %s : %s", exc_type, filename, exc_tb.tb_lineno, unicode(e))
-
         # Get the error log
         eh.flush()
         error = stream.getvalue()
@@ -386,7 +384,7 @@ class DataJsonController(BaseController):
 
             if body:
                 try:
-                    do_validation([dict(body)], c.errors, None)
+                    do_validation([dict(body)], c.errors, set())
                 except Exception as e:
                     c.errors.append(("Internal Error", ["Something bad happened: " + unicode(e)]))
                 if len(c.errors) == 0:
