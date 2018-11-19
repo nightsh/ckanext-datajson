@@ -125,10 +125,10 @@
       }
     },
     "keyword": {
-      "extra": true,
+      "extra": false,
       "type": "array",
       "field": "tags",
-      "split": ","
+      "array_key": "display_name"
     },
     "bureauCode": {
       "type": "array",
