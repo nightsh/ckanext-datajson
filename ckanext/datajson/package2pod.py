@@ -126,17 +126,23 @@ class Package2Pod:
                         dataset[key] = Package2Pod.filter(dataset[key])
 
                 elif 'array' == field_type:
-                    if is_extra:
-                        found_element = strip_if_string(get_extra(package, field))
-                        if found_element:
-                            if is_redacted(found_element):
-                                dataset[key] = found_element
-                            elif split:
-                                dataset[key] = [Package2Pod.filter(x) for x in string.split(found_element, split)]
 
+                    # Cherry-pick key
+                    if array_key:
+                        dataset[key] = [Package2Pod.filter(t[array_key]) for t in package.get(field, {})]
+
+                    # The whole array
                     else:
-                        if array_key:
-                            dataset[key] = [Package2Pod.filter(t[array_key]) for t in package.get(field, {})]
+                        if is_extra:
+                            found_element = strip_if_string(get_extra(package, field))
+                        else:
+                            found_element = strip_if_string(package.get(field))
+                        if found_element:
+                            if split:
+                                dataset[key] = [Package2Pod.filter(x) for x in string.split(found_element, split)]
+                            elif is_redacted(found_element):
+                                dataset[key] = found_element
+
                 if wrapper:
                     # log.debug('wrapper: %s', wrapper)
                     method = getattr(Wrappers, wrapper)

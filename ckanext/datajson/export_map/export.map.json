@@ -132,15 +132,15 @@
     },
     "bureauCode": {
       "type": "array",
-      "extra": true,
-      "field": "Bureau Code",
+      "extra": false,
+      "field": "bureauCode",
       "split": ",",
       "wrapper": "bureau_code"
     },
     "programCode": {
       "type": "array",
-      "extra": true,
-      "field": "Program Code",
+      "extra": false,
+      "field": "programCode",
       "split": ","
     },
     "language": {
