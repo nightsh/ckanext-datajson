@@ -127,10 +127,6 @@ class Package2Pod:
 
                 elif 'array' == field_type:
 
-                    log.debug('!!!')
-                    log.debug(package.get(field))
-                    log.debug('!!!')
-
                     # Cherry-pick key
                     if array_key:
                         dataset[key] = [Package2Pod.filter(t.get(array_key)) for t in package.get(field, [{}])]
