@@ -49,8 +49,8 @@
       "field": "landingPage"
     },
     "license": {
-      "extra": true,
-      "field": "license"
+      "extra": false,
+      "field": "license_url"
     },
     "primaryITInvestmentUII": {
       "extra": true,
