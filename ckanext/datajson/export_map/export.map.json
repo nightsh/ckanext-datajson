@@ -57,7 +57,7 @@
       "field": "Primary It Investment Uii"
     },
     "rights": {
-      "extra": true,
+      "extra": false,
       "field": "rights"
     },
     "systemOfRecords": {
