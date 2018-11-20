@@ -65,8 +65,8 @@
       "field": "System Of Records"
     },
     "spatial": {
-      "extra": true,
-      "field": "Spatial"
+      "extra": false,
+      "field": "spatial"
     },
     "temporal": {
       "extra": true,
