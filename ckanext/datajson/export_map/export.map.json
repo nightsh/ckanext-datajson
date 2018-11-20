@@ -69,8 +69,8 @@
       "field": "spatial"
     },
     "temporal": {
-      "extra": true,
-      "field": "Temporal"
+      "extra": false,
+      "field": "temporal"
     },
     "publisher": {
       "extra": true,
