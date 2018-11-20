@@ -18,7 +18,7 @@
     },
     "accessLevel": {
       "extra": true,
-      "field": "Access Level",
+      "field": "access_level",
       "default": "public"
     },
     "identifier": {
@@ -87,11 +87,11 @@
       "map": {
         "fn": {
           "extra": false,
-          "field": "contactName"
+          "field": "contact_name"
         },
         "hasEmail": {
           "extra": false,
-          "field": "contactEmail"
+          "field": "contact_email"
         }
       }
     },
@@ -133,14 +133,14 @@
     "bureauCode": {
       "type": "array",
       "extra": false,
-      "field": "bureauCode",
+      "field": "bureau_code",
       "split": ",",
       "wrapper": "bureau_code"
     },
     "programCode": {
       "type": "array",
       "extra": false,
-      "field": "programCode",
+      "field": "program_code",
       "split": ","
     },
     "language": {
