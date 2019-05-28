@@ -19,6 +19,8 @@ from jsonschema import FormatChecker
 
 from sqlalchemy.exc import IntegrityError
 
+from .helpers import reverse_accrual_periodicity_dict
+
 import logging
 log = logging.getLogger("harvester")
 
@@ -479,39 +481,39 @@ class DatasetHarvesterBase(HarvesterBase):
             "title": "title",
             "description": "notes",
             "keyword": "tags",
-            "modified": "extras__modified", # ! revision_timestamp
-            "publisher": "extras__publisher", # !owner_org
-            "contactPoint": {"fn":"maintainer", "hasEmail":"maintainer_email"},
-            "identifier": "extras__identifier", # !id
-            "accessLevel": "extras__accessLevel",
+            "modified": "modified", # ! revision_timestamp
+            "publisher": {"name": "publisher"}, # !owner_org
+            "contactPoint": {"fn":"contact_name", "hasEmail":"contact_email"},
+            "identifier": "unique_id", # !id
+            "accessLevel": "public_access_level",
 
-            "bureauCode": "extras__bureauCode",
-            "programCode": "extras__programCode",
+            "bureauCode": "bureau_code[]",
+            "programCode": "program_code[]",
             "rights": "extras__rights",
-            "license": "extras__license", # !license_id
-            "spatial": "extras__spatial", # Geometry not valid GeoJSON, not indexing
-            "temporal": "extras__temporal",
+            "license": "license_id", # !license_id
+            "spatial": "spatial", # Geometry not valid GeoJSON, not indexing
+            "temporal": "temporal",
 
             "theme": "extras__theme",
-            "dataDictionary": "extras__dataDictionary", # !data_dict
-            "dataQuality": "extras__dataQuality",
-            "accrualPeriodicity":"extras__accrualPeriodicity",
-            "landingPage": "extras__landingPage",
-            "language": "extras__language",
-            "primaryITInvestmentUII": "extras__primaryITInvestmentUII", # !PrimaryITInvestmentUII
+            "dataDictionary": "data_dictionary", # !data_dict
+            "dataQuality": "data_quality",
+            "accrualPeriodicity":"accrual_periodicity",
+            "landingPage": "homepage_url",
+            "language": "language[]",
+            "primaryITInvestmentUII": "primary_it_investment_uii", # !PrimaryITInvestmentUII
             "references": "extras__references",
             "issued": "extras__issued",
-            "systemOfRecords": "extras__systemOfRecords",
+            "systemOfRecords": "system_of_records",
 
             "distribution": None,
         }
 
         SKIP = ["accessURL", "webService", "format", "distribution"] # will go into pkg["resources"]
         # also skip the processed_how key, it was added to indicate how we processed the dataset.
-        SKIP.append("processed_how");
+        SKIP.append("processed_how")
 
         SKIP_V1_1 = ["@type", "isPartOf", "distribution"]
-        SKIP_V1_1.append("processed_how");
+        SKIP_V1_1.append("processed_how")
 
         if lowercase_conversion:
 
@@ -618,10 +620,8 @@ class DatasetHarvesterBase(HarvesterBase):
             new_keys = []
             values = []
             if isinstance(new_key, dict): # when schema is not 1.0
-                _new_key_keys = new_key.keys()
-                new_keys = new_key.values()
-                values = []
-                for _key in _new_key_keys:
+                for _key, _value in new_key.iteritems():
+                    new_keys.append(_value)
                     values.append(value.get(_key))
             else:
                 new_keys.append(new_key)
@@ -634,10 +634,24 @@ class DatasetHarvesterBase(HarvesterBase):
             for mini_key, mini_value in mini_dataset.iteritems():
                 if not mini_value:
                     continue
+                if mini_key.endswith('[]'):
+                    mini_key = mini_key[:-2]
+                    mini_value = ','.join(mini_value)
+
                 if mini_key.startswith('extras__'):
                     extras.append({"key": mini_key[8:], "value": mini_value})
                 else:
                     pkg[mini_key] = mini_value
+
+        # fix for accrual_periodicity
+        if 'accrual_periodicity' in pkg:
+            ap = pkg['accrual_periodicity']
+            pkg['accrual_periodicity'] = \
+                reverse_accrual_periodicity_dict.get(ap, ap)
+        
+        # fix for tag_string
+        if 'tags' in pkg:
+            pkg['tag_string'] = ','.join(pkg['tags'])
 
         # pick a fix number of unmapped entries and put into extra
         if unmapped:
