@@ -651,7 +651,7 @@ class DatasetHarvesterBase(HarvesterBase):
         
         # fix for tag_string
         if 'tags' in pkg:
-            pkg['tag_string'] = ','.join(pkg['tags'])
+            pkg['tag_string'] = ''
 
         # pick a fix number of unmapped entries and put into extra
         if unmapped:
