@@ -12,6 +12,8 @@ git push <your-fork-alias>
 
 # Merge all actives versions
 To upgrade this extension we analyzed other many. We started forking [the OKF datajson ext](https://github.com/avdata99/ckanext-datajson).  
+Some commit is ready for cherry-picking but others don't.  
+
 Adding external forks
 
 ```
@@ -30,10 +32,11 @@ git fetch gsa
 ```
 
 
-
 List of commit to cherry-pick or analyze to include:  
 
-20180309 https://github.com/OpenGov-OpenData/ckanext-datajson/commit/ae2748f6029b08223b42b6d03ad475957876fed5
+[DONE, cleaning] 20180309 https://github.com/OpenGov-OpenData/ckanext-datajson/commit/ae2748f6029b08223b42b6d03ad475957876fed5
+
+
 20180309 paginate data.json https://github.com/OpenGov-OpenData/ckanext-datajson/commit/b668dcfd23e770b21b838872ee05e6f33287eb8d
 20180801 [NO] removes bureau and progman codes https://github.com/OpenGov-OpenData/ckanext-datajson/commit/f5ab8afd54343e0207cb418467dbc7b9ec325c82
 20180831 [YES] Fix validation https://github.com/ViderumGlobal/ckanext-datajson/commit/8cb92134e6e21a25c795557ddecbe14b887e1ef9
