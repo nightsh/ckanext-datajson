@@ -508,10 +508,10 @@ class DatasetHarvesterBase(HarvesterBase):
 
         SKIP = ["accessURL", "webService", "format", "distribution"] # will go into pkg["resources"]
         # also skip the processed_how key, it was added to indicate how we processed the dataset.
-        SKIP.append("processed_how");
+        SKIP.append("processed_how")
 
         SKIP_V1_1 = ["@type", "isPartOf", "distribution"]
-        SKIP_V1_1.append("processed_how");
+        SKIP_V1_1.append("processed_how")
 
         if lowercase_conversion:
 
@@ -618,10 +618,8 @@ class DatasetHarvesterBase(HarvesterBase):
             new_keys = []
             values = []
             if isinstance(new_key, dict): # when schema is not 1.0
-                _new_key_keys = new_key.keys()
-                new_keys = new_key.values()
-                values = []
-                for _key in _new_key_keys:
+                for _key, _value in new_key.iteritems():
+                    new_keys.append(_value)
                     values.append(value.get(_key))
             else:
                 new_keys.append(new_key)
@@ -634,11 +632,19 @@ class DatasetHarvesterBase(HarvesterBase):
             for mini_key, mini_value in mini_dataset.iteritems():
                 if not mini_value:
                     continue
+                if mini_key.endswith('[]'):
+                    mini_key = mini_key[:-2]
+                    mini_value = ','.join(mini_value)
                 if mini_key.startswith('extras__'):
                     extras.append({"key": mini_key[8:], "value": mini_value})
                 else:
                     pkg[mini_key] = mini_value
 
+        # fix for accrual_periodicity
+        if 'accrual_periodicity' in pkg:
+            ap = pkg['accrual_periodicity']
+            pkg['accrual_periodicity'] = reverse_accrual_periodicity_dict.get(ap, ap)
+            
         # pick a fix number of unmapped entries and put into extra
         if unmapped:
             unmapped.sort()
