@@ -34,20 +34,17 @@ git fetch gsa
 
 List of commit to cherry-pick or analyze to include:  
 
-[DONE, cleaning] 20180309 https://github.com/OpenGov-OpenData/ckanext-datajson/commit/ae2748f6029b08223b42b6d03ad475957876fed5
-
-
-20180309 paginate data.json https://github.com/OpenGov-OpenData/ckanext-datajson/commit/b668dcfd23e770b21b838872ee05e6f33287eb8d
-20180801 [NO] removes bureau and progman codes https://github.com/OpenGov-OpenData/ckanext-datajson/commit/f5ab8afd54343e0207cb418467dbc7b9ec325c82
-20180831 [YES] Fix validation https://github.com/ViderumGlobal/ckanext-datajson/commit/8cb92134e6e21a25c795557ddecbe14b887e1ef9
-20180904 [YES] Fix getting extras https://github.com/ViderumGlobal/ckanext-datajson/commit/daedda3ba769150927136a5502db23db4362b2cf
-check all ED branch at OKF
-20181119 [?] AT ED BRANCH FROM Bureau and progman as extras https://github.com/okfn/ckanext-datajson/commit/a12768fd165f78112fd7f36f3d442555e7886c30
-20181120 [?] Spatial as no-extra https://github.com/okfn/ckanext-datajson/commit/81b752de7c5bc91cdbc5d70736e169f1caa21a2a
-20181120 [?] Temportal as no-extra https://github.com/okfn/ckanext-datajson/commit/2be2fe429f95e5b685ca715d2301f254de5588e4
-20181207 Add missing pod schema https://github.com/OpenGov-OpenData/ckanext-datajson/commit/784489ca0ef05659314317d3c836d0e7e4ad5aad
-20181210 Add mediaType https://github.com/OpenGov-OpenData/ckanext-datajson/commit/e58fa780b18999738b0518017ca768053109fd53+
-20181212 Simplify validation languaje https://github.com/OpenGov-OpenData/ckanext-datajson/commit/685c8c38b4c4fc7fd1b3b33dec9abb4d48ee78fc
+[OpenGov 20180309](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/ae2748f6029b08223b42b6d03ad475957876fed5): Cleaned.  
+[OpenGov 20180309](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/b668dcfd23e770b21b838872ee05e6f33287eb8d) paginate data.json: Already fixed, not needed.  
+[OpenGov 20180801](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/f5ab8afd54343e0207cb418467dbc7b9ec325c82): Not used, removes bureau and progma validation. We already have schemas for federal and not federal datasets. Check the differences.  
+[Viderum 20180831](https://github.com/ViderumGlobal/ckanext-datajson/commit/8cb92134e6e21a25c795557ddecbe14b887e1ef9): already implemented.  
+[Viderum 20180904](https://github.com/ViderumGlobal/ckanext-datajson/commit/daedda3ba769150927136a5502db23db4362b2cf) Fix getting extras: Already implemented.   
+[OKF ed branch 20181119](https://github.com/okfn/ckanext-datajson/commit/a12768fd165f78112fd7f36f3d442555e7886c30): Not needed.  
+[OKF ed branch 20181120](https://github.com/okfn/ckanext-datajson/commit/81b752de7c5bc91cdbc5d70736e169f1caa21a2a) Spatial as no-extra: Not needed, at ignored file.  
+[OKF ed branch 20181120](https://github.com/okfn/ckanext-datajson/commit/2be2fe429f95e5b685ca715d2301f254de5588e4) Temportal as no-extra: Not needed, at ignored file.  
+[OpenGov 20181207](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/784489ca0ef05659314317d3c836d0e7e4ad5aad): I moprts already fixed. Other changes was for _make_pdl_ function not used in our branch. Analyze.  
+[OpenGov 20181210](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/e58fa780b18999738b0518017ca768053109fd53): In buildd_datajson file we are not using.  
+[OpenGov 20181212](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/685c8c38b4c4fc7fd1b3b33dec9abb4d48ee78fc) Simplify validation languaje 
 --> and back ... https://github.com/OpenGov-OpenData/ckanext-datajson/commit/3f50f43ac77def7708c3e409449c72851890c3a0
 20181212 Only datasets for data.json https://github.com/OpenGov-OpenData/ckanext-datajson/commit/88eb76cae2aa262cf88c4d8a9e25a841e1ade771
 20190528 Analyze accrual_periodicity https://github.com/ViderumGlobal/ckanext-datajson/commit/205e748b13cd8159d60d29696a6171c70ace62fb
@@ -63,3 +60,9 @@ check all ED branch at OKF
 20190819 If pagination reaches the last page we don't want to display the full dataset results https://github.com/OpenGov-OpenData/ckanext-datajson/commit/61f216e487dd3a530c61cf8672bd71e425e76160
 20190827 Don't add resources to data.json if it's missing a url https://github.com/OpenGov-OpenData/ckanext-datajson/commit/0d900484a70c2030dccae7511a80e298e081841d
 20190910 fix import https://github.com/akariv/ckanext-datajson/commit/0fa0cd1c6cc86afc900bab49fe4ac686ab1f6bfa
+
+
+## Future analysis
+
+- [ ] Do we need the build_datajson.py file?
+- [ ] Do need to validate as required for bureau and progman codes since we have schemas for federal and non-federal resources?
