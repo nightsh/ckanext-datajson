@@ -265,9 +265,10 @@ accrual_periodicity_dict = {
     'not updated': 'irregular'
 }
 
-reverse_accrual_periodicity_dict = dict((v, k[0].upper() + k[1:].lower())
+reverse_accrual_periodicity_dict = dict((v, k.title())
                                         for k, v
                                         in accrual_periodicity_dict.iteritems()
                                         if v.startswith('R/'))
 reverse_accrual_periodicity_dict['irregular'] = 'Irregular'
 reverse_accrual_periodicity_dict['R/P0.25Y'] = 'Quarterly'
+
