@@ -18,7 +18,7 @@ from jsonschema.validators import Draft4Validator
 from jsonschema import FormatChecker
 
 from sqlalchemy.exc import IntegrityError
-from .helpers import reverse_accrual_periodicity_dict
+from ckanext.datajson.helpers import reverse_accrual_periodicity_dict
 import logging
 log = logging.getLogger("harvester")
 

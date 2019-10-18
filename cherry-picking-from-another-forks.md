@@ -57,7 +57,7 @@ List of commit to cherry-pick or analyze to include:
 [Viderum 20190628](https://github.com/ViderumGlobal/ckanext-datajson/commit/873e7c83018ae23eb29c56164561d3f637625f7a) check mailto at mantainer_email: Already imemented.   
 [OpenGov 20190819](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/61f216e487dd3a530c61cf8672bd71e425e76160): Not sure, ignored.  
 [OpenGov 20190827](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/0d900484a70c2030dccae7511a80e298e081841d) Don't add resources to data.json if it's missing a url: Implemented
-20190910 fix import https://github.com/akariv/ckanext-datajson/commit/0fa0cd1c6cc86afc900bab49fe4ac686ab1f6bfa
+[Akariv 20190910](https://github.com/akariv/ckanext-datajson/commit/0fa0cd1c6cc86afc900bab49fe4ac686ab1f6bfa) fix import: implemented.   
 
 
 ## Future analysis
