@@ -60,9 +60,9 @@ List of commit to cherry-pick or analyze to include:
 [Akariv 20190910](https://github.com/akariv/ckanext-datajson/commit/0fa0cd1c6cc86afc900bab49fe4ac686ab1f6bfa) fix import: implemented.   
 
 
-## Future analysis
+## Needed analysis
 
 - [ ] Do we need the build_datajson.py file?
 - [ ] Do need to validate as required for bureau and progman codes since we have schemas for federal and non-federal resources?
-- [ ] OpenGov fork uses _make_edi_ and _make_pdl_ function. Do we need them?
-- [ ] OpenGov fork seems to start another way. We need to talk and merge.
+- [ ] OpenGov fork seems is in use and it's little different. We need to talk and merge.
+  - [ ] OpenGov fork uses _make_edi_ and _make_pdl_ function. Do we need them?
