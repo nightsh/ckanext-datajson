@@ -44,10 +44,9 @@ List of commit to cherry-pick or analyze to include:
 [OKF ed branch 20181120](https://github.com/okfn/ckanext-datajson/commit/2be2fe429f95e5b685ca715d2301f254de5588e4) Temportal as no-extra: Not needed, at ignored file.  
 [OpenGov 20181207](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/784489ca0ef05659314317d3c836d0e7e4ad5aad): I moprts already fixed. Other changes was for _make_pdl_ function not used in our branch. Analyze.  
 [OpenGov 20181210](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/e58fa780b18999738b0518017ca768053109fd53): In buildd_datajson file we are not using.  
-[OpenGov 20181212](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/685c8c38b4c4fc7fd1b3b33dec9abb4d48ee78fc) Simplify validation languaje 
---> and back ... https://github.com/OpenGov-OpenData/ckanext-datajson/commit/3f50f43ac77def7708c3e409449c72851890c3a0
-20181212 Only datasets for data.json https://github.com/OpenGov-OpenData/ckanext-datajson/commit/88eb76cae2aa262cf88c4d8a9e25a841e1ade771
-20190528 Analyze accrual_periodicity https://github.com/ViderumGlobal/ckanext-datajson/commit/205e748b13cd8159d60d29696a6171c70ace62fb
+[OpenGov 20181212](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/3f50f43ac77def7708c3e409449c72851890c3a0) Validation languaje: Implemented.  
+[OpenGov 20181212](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/88eb76cae2aa262cf88c4d8a9e25a841e1ade771) Only proccess _type:dataset_: Do we need it?. Not implemented.  
+[Viderum 20190528](https://github.com/ViderumGlobal/ckanext-datajson/commit/205e748b13cd8159d60d29696a6171c70ace62fb) Implemented, fixes for accrual_periodicity.  
 20190425 Hotfix dict https://github.com/akariv/ckanext-datajson/commit/407294c12dbdd290c0a829748f4a4413a25d96e1
 20190425 More on accrual_periodicity https://github.com/akariv/ckanext-datajson/commit/d0386071216ec69c5981ae32cacc5c15fecf390c
 20190425 Check https://github.com/akariv/ckanext-datajson/commit/1620a73af9330108a8e9ac3a2fa40164d617b32c
@@ -66,3 +65,4 @@ List of commit to cherry-pick or analyze to include:
 
 - [ ] Do we need the build_datajson.py file?
 - [ ] Do need to validate as required for bureau and progman codes since we have schemas for federal and non-federal resources?
+- [ ] OpenGov fork uses _make_edi_ and _make_pdl_ function. Do we need them?
