@@ -53,7 +53,7 @@ List of commit to cherry-pick or analyze to include:
 [OpenGov 20190530](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/10691e4c2d1069782caf37dc686afee2d62832e6) Allows export map path be configurable. Implemented.  
 [OpenGov 20190530](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/5915c95c5e71b2c440bce255eb187fb5ca002060): We take the new periodicity.  
 [GSA 20190604](https://github.com/GSA/ckanext-datajson/commit/91254e49fba5079835943d5818cbfdb7f4aad6d7) logs for GSA. Implemented (git cherry-pick 91254e49fba5079835943d5818cbfdb7f4aad6d7).   
-20190614 fix SSL https://github.com/ViderumGlobal/ckanext-datajson/commit/33660c62bd537f664f3cd0cbd42b30277bf20141
+[Viderum 20190614](https://github.com/ViderumGlobal/ckanext-datajson/commit/33660c62bd537f664f3cd0cbd42b30277bf20141) fix SSL. Implemented.   
 20190628 check mailto at mantainer_email https://github.com/ViderumGlobal/ckanext-datajson/commit/873e7c83018ae23eb29c56164561d3f637625f7a
 20190819 If pagination reaches the last page we don't want to display the full dataset results https://github.com/OpenGov-OpenData/ckanext-datajson/commit/61f216e487dd3a530c61cf8672bd71e425e76160
 20190827 Don't add resources to data.json if it's missing a url https://github.com/OpenGov-OpenData/ckanext-datajson/commit/0d900484a70c2030dccae7511a80e298e081841d
