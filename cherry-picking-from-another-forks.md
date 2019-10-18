@@ -64,6 +64,6 @@ List of analized commits:
 ## Needed analysis
 
 - [ ] Do we need the build_datajson.py file?
-- [ ] Do need to validate as required for bureau and progman codes since we have schemas for federal and non-federal resources?
+- [ ] Do we need to validate as required for bureau and progman codes since we have schemas for federal and non-federal resources?
 - [ ] OpenGov fork seems is in use and it's little different. We need to talk and merge.
   - [ ] OpenGov fork uses _make_edi_ and _make_pdl_ function. Do we need them?
