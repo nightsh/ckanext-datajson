@@ -31,8 +31,9 @@ git fetch akariv
 git fetch gsa
 ```
 
+# Merging
 
-List of commit to cherry-pick or analyze to include:  
+List of analized commits:  
 
 [OpenGov 20180309](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/ae2748f6029b08223b42b6d03ad475957876fed5): Cleaned.  
 [OpenGov 20180309](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/b668dcfd23e770b21b838872ee05e6f33287eb8d) paginate data.json: Already fixed, not needed.  
