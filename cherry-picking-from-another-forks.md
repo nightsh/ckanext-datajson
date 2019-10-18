@@ -54,9 +54,9 @@ List of commit to cherry-pick or analyze to include:
 [OpenGov 20190530](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/5915c95c5e71b2c440bce255eb187fb5ca002060): We take the new periodicity.  
 [GSA 20190604](https://github.com/GSA/ckanext-datajson/commit/91254e49fba5079835943d5818cbfdb7f4aad6d7) logs for GSA. Implemented (git cherry-pick 91254e49fba5079835943d5818cbfdb7f4aad6d7).   
 [Viderum 20190614](https://github.com/ViderumGlobal/ckanext-datajson/commit/33660c62bd537f664f3cd0cbd42b30277bf20141) fix SSL. Implemented.   
-20190628 check mailto at mantainer_email https://github.com/ViderumGlobal/ckanext-datajson/commit/873e7c83018ae23eb29c56164561d3f637625f7a
-20190819 If pagination reaches the last page we don't want to display the full dataset results https://github.com/OpenGov-OpenData/ckanext-datajson/commit/61f216e487dd3a530c61cf8672bd71e425e76160
-20190827 Don't add resources to data.json if it's missing a url https://github.com/OpenGov-OpenData/ckanext-datajson/commit/0d900484a70c2030dccae7511a80e298e081841d
+[Viderum 20190628](https://github.com/ViderumGlobal/ckanext-datajson/commit/873e7c83018ae23eb29c56164561d3f637625f7a) check mailto at mantainer_email: Already imemented.   
+[OpenGov 20190819](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/61f216e487dd3a530c61cf8672bd71e425e76160): Not sure, ignored.  
+[OpenGov 20190827](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/0d900484a70c2030dccae7511a80e298e081841d) Don't add resources to data.json if it's missing a url: Implemented
 20190910 fix import https://github.com/akariv/ckanext-datajson/commit/0fa0cd1c6cc86afc900bab49fe4ac686ab1f6bfa
 
 
@@ -65,3 +65,4 @@ List of commit to cherry-pick or analyze to include:
 - [ ] Do we need the build_datajson.py file?
 - [ ] Do need to validate as required for bureau and progman codes since we have schemas for federal and non-federal resources?
 - [ ] OpenGov fork uses _make_edi_ and _make_pdl_ function. Do we need them?
+- [ ] OpenGov fork seems to start another way. We need to talk and merge.

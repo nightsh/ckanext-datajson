@@ -408,6 +408,7 @@ class Wrappers:
                         log.warn("Missing mediaType for resource in package ['%s']", package.get('id'))
             else:
                 log.warn("Missing downloadURL for resource in package ['%s']", package.get('id'))
+                continue
 
             striped_resource = OrderedDict(
                 [(x, y) for x, y in resource.iteritems() if y is not None and y != "" and y != []])
