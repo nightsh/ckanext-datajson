@@ -50,10 +50,9 @@ List of commit to cherry-pick or analyze to include:
 [Akariv 20190425](https://github.com/akariv/ckanext-datajson/commit/407294c12dbdd290c0a829748f4a4413a25d96e1). Already fixed.   
 [Akariv 20190425](https://github.com/akariv/ckanext-datajson/commit/d0386071216ec69c5981ae32cacc5c15fecf390c) More on accrual_periodicity: Implemented fix import.   
 [Akariv 20190425](https://github.com/akariv/ckanext-datajson/commit/1620a73af9330108a8e9ac3a2fa40164d617b32c): Implemented _title_.  
---> and https://github.com/akariv/ckanext-datajson/commit/15ddbd88cb52ec63e637768d17451281c9251bc0
-20190530 fix export map path https://github.com/OpenGov-OpenData/ckanext-datajson/commit/10691e4c2d1069782caf37dc686afee2d62832e6
-20190530 fix package to pod https://github.com/OpenGov-OpenData/ckanext-datajson/commit/5915c95c5e71b2c440bce255eb187fb5ca002060
-20190604 logs for GSA https://github.com/GSA/ckanext-datajson/commit/91254e49fba5079835943d5818cbfdb7f4aad6d7
+[OpenGov 20190530](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/10691e4c2d1069782caf37dc686afee2d62832e6) Allows export map path be configurable. Implemented.  
+[OpenGov 20190530](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/5915c95c5e71b2c440bce255eb187fb5ca002060): We take the new periodicity.  
+[GSA 20190604](https://github.com/GSA/ckanext-datajson/commit/91254e49fba5079835943d5818cbfdb7f4aad6d7) logs for GSA. Implemented (git cherry-pick 91254e49fba5079835943d5818cbfdb7f4aad6d7).   
 20190614 fix SSL https://github.com/ViderumGlobal/ckanext-datajson/commit/33660c62bd537f664f3cd0cbd42b30277bf20141
 20190628 check mailto at mantainer_email https://github.com/ViderumGlobal/ckanext-datajson/commit/873e7c83018ae23eb29c56164561d3f637625f7a
 20190819 If pagination reaches the last page we don't want to display the full dataset results https://github.com/OpenGov-OpenData/ckanext-datajson/commit/61f216e487dd3a530c61cf8672bd71e425e76160

@@ -42,6 +42,7 @@ class DataJsonPlugin(p.SingletonPlugin):
                                                   re.sub(r"\.json$", ".jsonld", DataJsonPlugin.route_path))
         DataJsonPlugin.ld_id = config.get("ckanext.datajsonld.id", config.get("ckan.site_url"))
         DataJsonPlugin.ld_title = config.get("ckan.site_title", "Catalog")
+        DataJsonPlugin.map_filename = config.get("ckanext.datajson.map_filename", "export.map.json")
         DataJsonPlugin.site_url = config.get("ckan.site_url")
 
         DataJsonPlugin.inventory_links_enabled = config.get("ckanext.datajson.inventory_links_enabled",
@@ -193,7 +194,7 @@ class DataJsonController(BaseController):
                 packages = DataJsonController._get_ckan_datasets()
                 # packages = p.toolkit.get_action("current_package_list_with_resources")(None, {})
 
-            json_export_map = get_export_map_json('export.map.json')
+            json_export_map = get_export_map_json(DataJsonPlugin.map_filename)
 
             if json_export_map:
                 for pkg in packages:

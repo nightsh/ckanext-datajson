@@ -262,7 +262,8 @@ accrual_periodicity_dict = {
     'irregular': 'irregular',
     'notplanned': 'irregular',
     'unknown': 'irregular',
-    'not updated': 'irregular'
+    'not updated': 'irregular',
+    'other': 'irregular'
 }
 
 reverse_accrual_periodicity_dict = dict((v, k.title())
