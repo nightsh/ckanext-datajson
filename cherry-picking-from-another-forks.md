@@ -47,8 +47,8 @@ List of commit to cherry-pick or analyze to include:
 [OpenGov 20181212](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/3f50f43ac77def7708c3e409449c72851890c3a0) Validation languaje: Implemented.  
 [OpenGov 20181212](https://github.com/OpenGov-OpenData/ckanext-datajson/commit/88eb76cae2aa262cf88c4d8a9e25a841e1ade771) Only proccess _type:dataset_: Do we need it?. Not implemented.  
 [Viderum 20190528](https://github.com/ViderumGlobal/ckanext-datajson/commit/205e748b13cd8159d60d29696a6171c70ace62fb) Implemented, fixes for accrual_periodicity.  
-20190425 Hotfix dict https://github.com/akariv/ckanext-datajson/commit/407294c12dbdd290c0a829748f4a4413a25d96e1
-20190425 More on accrual_periodicity https://github.com/akariv/ckanext-datajson/commit/d0386071216ec69c5981ae32cacc5c15fecf390c
+[Akariv 20190425](https://github.com/akariv/ckanext-datajson/commit/407294c12dbdd290c0a829748f4a4413a25d96e1). Already fixed.   
+[Akariv 20190425](https://github.com/akariv/ckanext-datajson/commit/d0386071216ec69c5981ae32cacc5c15fecf390c) More on accrual_periodicity: Implemented fix import.   
 20190425 Check https://github.com/akariv/ckanext-datajson/commit/1620a73af9330108a8e9ac3a2fa40164d617b32c
 --> and https://github.com/akariv/ckanext-datajson/commit/15ddbd88cb52ec63e637768d17451281c9251bc0
 20190530 fix export map path https://github.com/OpenGov-OpenData/ckanext-datajson/commit/10691e4c2d1069782caf37dc686afee2d62832e6

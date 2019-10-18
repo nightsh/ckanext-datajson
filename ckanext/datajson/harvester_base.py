@@ -644,7 +644,7 @@ class DatasetHarvesterBase(HarvesterBase):
         if 'accrual_periodicity' in pkg:
             ap = pkg['accrual_periodicity']
             pkg['accrual_periodicity'] = reverse_accrual_periodicity_dict.get(ap, ap)
-            
+
         # pick a fix number of unmapped entries and put into extra
         if unmapped:
             unmapped.sort()
