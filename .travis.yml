@@ -4,7 +4,7 @@ language: python
 python:
     - "2.7"
 env:
-    - CKANVERSION=inventory
+    - CKANVERSION=2.8
 install:
     - bash bin/travis-build.bash
 script: sh bin/travis-run.sh
