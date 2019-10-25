@@ -5,7 +5,7 @@ import paste.fixture
 import pylons.test
 
 import ckan.model as model
-import ckan.tests as tests
+import ckan.tests.legacy as tests
 import ckan.plugins as plugins
 
 
