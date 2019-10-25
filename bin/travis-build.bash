@@ -8,14 +8,14 @@ sudo apt-get update -qq
 sudo apt-get install solr-jetty libcommons-fileupload-java:amd64=1.2.2-1
 
 echo "Installing CKAN and its Python dependencies..."
-git clone https://github.com/gsa/ckan
+git clone https://github.com/ckan/ckan
 cd ckan
 if [ $CKANVERSION == '2.8' ]
 then
-	git checkout datagov
+	git checkout master
 elif [ $CKANVERSION == '2.3' ]
 then
-	git checkout 2.3-upgrade
+	git checkout release-v2.3
 fi
 python setup.py develop
 cp ./ckan/public/base/css/main.css ./ckan/public/base/css/main.debug.css
@@ -36,11 +36,15 @@ cd -
 
 cd ..
 echo "Installing Harverter"
-git clone https://github.com/gsa/ckanext-harvest
+git clone https://github.com/ckan/ckanext-harvest
 cd ckanext-harvest
-if [ $CKANVERSION == 'release-datagov' ]
+if [ $CKANVERSION == '2.8' ]
 then
-	git checkout inventory
+	git checkout master
+fi
+elif [ $CKANVERSION == '2.3' ]
+then
+	git checkout master
 fi
 
 python setup.py develop
