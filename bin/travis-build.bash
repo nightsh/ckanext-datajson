@@ -7,13 +7,13 @@ echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
 sudo apt-get install solr-jetty libcommons-fileupload-java
 
-if [ $CKANVERSION == '2.8' ]
-then
-	sudo apt-get install postgresql-9.6
-elif [ $CKANVERSION == '2.3' ]
-then
-	sudo apt-get install postgresql-9.1
-fi
+# if [ $CKANVERSION == '2.8' ]
+# then
+# 	sudo apt-get install postgresql-9.6
+# elif [ $CKANVERSION == '2.3' ]
+# then
+# 	sudo apt-get install postgresql-9.1
+# fi
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
