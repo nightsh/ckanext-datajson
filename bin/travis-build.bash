@@ -7,6 +7,14 @@ echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
 sudo apt-get install solr-jetty
 
+if [ $CKANVERSION == '2.8' ]
+then
+	sudo apt-get install postgresql-9.1
+elif [ $CKANVERSION == '2.3' ]
+then
+	sudo apt-get install postgresql-9.6
+fi
+
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
 cd ckan
@@ -41,7 +49,6 @@ cd ckanext-harvest
 if [ $CKANVERSION == '2.8' ]
 then
 	git checkout master
-fi
 elif [ $CKANVERSION == '2.3' ]
 then
 	git checkout master
