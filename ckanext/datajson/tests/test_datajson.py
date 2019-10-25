@@ -5,7 +5,12 @@ import paste.fixture
 import pylons.test
 
 import ckan.model as model
-import ckan.tests.legacy as tests
+try:
+    # CKAN 2.8
+    import ckan.tests.legacy as tests
+except:
+    # CKAN 2.3
+    import ckan.tests as tests
 import ckan.plugins as plugins
 
 
@@ -38,7 +43,7 @@ class TestDatajsonPlugin(object):
                                               'package_list')
 
         print self.package_list
-        
+
         org_name = 'my_org_002'
         org_title = 'My ORG 002'
         pkg_name = 'my_pacgake_002'
