@@ -34,6 +34,11 @@ class TestDatajsonPlugin(object):
         model.Session.commit()
         model.Session.remove()
 
+        self.package_list = tests.call_action_api(self.app,
+                                              'package_list')
+
+        print self.package_list
+        
         org_name = 'my_org_002'
         org_title = 'My ORG 002'
         pkg_name = 'my_pacgake_002'
