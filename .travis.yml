@@ -9,8 +9,10 @@ env:
 install:
     - bash bin/travis-build.bash
 services:
+    - redis-server
     - postgresql
 script: sh bin/travis-run.sh
+dist: trusty
 after_success:
     - coveralls
 notifications:
