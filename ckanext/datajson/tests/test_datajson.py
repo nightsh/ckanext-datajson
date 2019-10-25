@@ -34,16 +34,18 @@ class TestDatajsonPlugin(object):
         model.Session.commit()
         model.Session.remove()
 
-        self.org_dict = tests.call_action_api(self.app, 'organization_create', apikey=self.sysadmin.apikey, name='my_org_000')
+        package_name = 'my_org_001'
+        self.org_dict = tests.call_action_api(self.app, 'organization_create', apikey=self.sysadmin.apikey, name=package_name)
 
         self.package_dict = tests.call_action_api(self.app, 'package_create', apikey=self.sysadmin.apikey,
-                                             name='my_package_000',
+                                             name=package_name,
                                              title='my package',
                                              notes='my package note',
                                              tag_string='my_package',
                                              ower_org = self.org_dict['id']
                                              )
-        assert self.package_dict['name'] == 'my_package_000'
+        assert self.package_dict['name'] == package_name
+
     def teardown(self):
         '''Nose runs this method after each test method in our test class.'''
 
