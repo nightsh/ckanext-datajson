@@ -9,10 +9,10 @@ sudo apt-get install solr-jetty
 
 if [ $CKANVERSION == '2.8' ]
 then
-	sudo apt-get install postgresql-9.1
+	sudo apt-get install postgresql-9.6
 elif [ $CKANVERSION == '2.3' ]
 then
-	sudo apt-get install postgresql-9.6
+	sudo apt-get install postgresql-9.1
 fi
 
 echo "Installing CKAN and its Python dependencies..."
