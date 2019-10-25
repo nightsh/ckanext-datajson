@@ -34,21 +34,26 @@ class TestDatajsonPlugin(object):
         model.Session.commit()
         model.Session.remove()
 
-        package_name = 'my_org_001'
+        org_name = 'my_org_002'
+        org_title = 'My ORG 002'
+        pkg_name = 'my_pacgake_002'
+        pkg_title = 'My package 002'
         self.org_dict = tests.call_action_api(self.app,
                                               'organization_create',
                                               apikey=self.sysadmin.apikey,
-                                              name=package_name,
-                                              status=409)
+                                              name=org_name,
+                                              title=org_title)
 
-        self.package_dict = tests.call_action_api(self.app, 'package_create', apikey=self.sysadmin.apikey,
-                                             name=package_name,
-                                             title='my package',
-                                             notes='my package note',
-                                             tag_string='my_package',
-                                             ower_org = self.org_dict['id']
+        self.package_dict = tests.call_action_api(self.app, 
+                                                  'package_create',
+                                                  apikey=self.sysadmin.apikey,
+                                                  name=pkg_name,
+                                                  title=pkg_title,
+                                                  notes='my package note',
+                                                  tag_string='my_package',
+                                                  ower_org=self.org_dict['id']
                                              )
-        assert self.package_dict['name'] == package_name
+        assert self.package_dict['name'] == pkg_name
 
     def teardown(self):
         '''Nose runs this method after each test method in our test class.'''
