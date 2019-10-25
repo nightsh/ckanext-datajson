@@ -13,7 +13,4 @@ services:
     - postgresql
 script: sh bin/travis-run.sh
 dist: trusty
-notifications:
-  email:
-    on_success: never  # default: change
-    on_failure: always # default: always
+group: deprecated-2017Q4
