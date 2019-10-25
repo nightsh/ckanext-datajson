@@ -1,4 +1,3 @@
-version: 2
 jobs:
   build:
     docker:
@@ -6,5 +5,5 @@ jobs:
     steps:
       - checkout
       - run:
-        name: update
-        command: sudo apt-get update -qq
+          name: update
+          command: sudo apt-get update -qq
