@@ -5,17 +5,17 @@ echo "This is travis-build.bash..."
 
 echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
-sudo apt-get install postgresql-$PGVERSION solr-jetty libcommons-fileupload-java:amd64=1.2.2-1
+sudo apt-get install solr-jetty libcommons-fileupload-java:amd64=1.2.2-1
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/gsa/ckan
 cd ckan
-if [ $CKANVERSION == 'inventory' ]
+if [ $CKANVERSION == '2.8' ]
 then
-	git checkout inventory
-elif [ $CKANVERSION == '2.2' ]
+	git checkout datagov
+elif [ $CKANVERSION == '2.3' ]
 then
-	git checkout release-v2.2.3
+	git checkout 2.3-upgrade
 fi
 python setup.py develop
 cp ./ckan/public/base/css/main.css ./ckan/public/base/css/main.debug.css

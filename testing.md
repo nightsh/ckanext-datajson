@@ -1,5 +1,10 @@
 # Testing extension
 
+_paster_ creates some travis boilerprate for you when you create a new extension.  
+Some examples:
+ - https://travis-ci.org/ckan/ckanext-dcat 
+ - https://travis-ci.org/ckan/ckanext-scheming
+
 ## Testing at harvester-base extension
 
 The harvester base extension [includes testing for the harvest process](https://github.com/ckan/ckanext-harvest/blob/master/ckanext/harvest/commands/harvester.py#L417).  

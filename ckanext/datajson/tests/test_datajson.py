@@ -8,10 +8,9 @@ import ckan.model as model
 import ckan.tests as tests
 import ckan.plugins as plugins
 
-class TestDatajsonPlugin(object):
-    '''Tests for the datajson.plugin module.
 
-    '''
+class TestDatajsonPlugin(object):
+    '''Tests for the datajson.plugin module.'''
 
     @classmethod
     def setup_class(cls):
