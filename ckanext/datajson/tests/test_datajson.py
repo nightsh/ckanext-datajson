@@ -35,7 +35,11 @@ class TestDatajsonPlugin(object):
         model.Session.remove()
 
         package_name = 'my_org_001'
-        self.org_dict = tests.call_action_api(self.app, 'organization_create', apikey=self.sysadmin.apikey, name=package_name)
+        self.org_dict = tests.call_action_api(self.app,
+                                              'organization_create',
+                                              apikey=self.sysadmin.apikey,
+                                              name=package_name,
+                                              status=409)
 
         self.package_dict = tests.call_action_api(self.app, 'package_create', apikey=self.sysadmin.apikey,
                                              name=package_name,
