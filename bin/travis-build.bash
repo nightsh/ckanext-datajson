@@ -48,12 +48,12 @@ then
 fi
 
 python setup.py develop
-pip install -r pip-requirements.txt --allow-all-external
+pip install -r pip-requirements.txt
 cd -
 
 echo "Installing ckanext-datajson and its requirements..."
 cd ckanext-datajson
-pip install -r pip-requirements.txt --allow-all-external
+pip install -r pip-requirements.txt
 python setup.py develop
 
 
