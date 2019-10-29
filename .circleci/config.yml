@@ -1,17 +1,19 @@
 version: 2.1
 jobs:
   build:
+    working_directory: ~/ckanext-datajson
     machine:
       image: circleci/classic:201708-01
     environment:
       CKANVERSION=2.8
     steps:
+      - checkout
       - run:
           name: where am I
           command: pwd && ls -la
       - run:
           name: install
-          command: /bin/travis-build.bash
+          command: bin/travis-build.bash
       - run:
           name: test
-          command: /bin/travis-run.sh
+          command: bin/travis-run.sh
