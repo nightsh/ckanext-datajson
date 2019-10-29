@@ -8,7 +8,7 @@ jobs:
     steps:
       - run:
           name: install
-          command: bin/travis-build.bash
+          command: ./bin/travis-build.bash
       - run:
           name: test
-          command: bin/travis-run.sh
+          command: ./bin/travis-run.sh
