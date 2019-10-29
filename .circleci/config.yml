@@ -2,8 +2,12 @@ jobs:
   build:
     docker:
       - image: circleci/python:2.7
+    environment:
+      - CKANVERSION=2.8
     steps:
-      - checkout
       - run:
-          name: update
-          command: sudo apt-get update -qq
+        name: install
+        command: bin/travis-build.bash
+      - run:
+        name: test
+        command: bin/travis-run.sh
