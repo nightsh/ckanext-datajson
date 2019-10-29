@@ -6,6 +6,8 @@ jobs:
       image: circleci/classic:201708-01
     environment:
       CKANVERSION=2.8
+    docker:
+      - image: circleci/postgres:9.6-alpine
     steps:
       - checkout
       - run:
