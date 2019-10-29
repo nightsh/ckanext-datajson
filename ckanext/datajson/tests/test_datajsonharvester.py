@@ -20,7 +20,7 @@ from ckanext.harvest.tests.factories import (HarvestSourceObj, HarvestJobObj,
 from ckanext.harvest.tests.lib import run_harvest
 import ckanext.harvest.model as harvest_model
 from ckanext.harvest.harvesters.base import HarvesterBase
-from ckanext.harvest.harvesters.datajson.harvester_datajson import DataJsonHarvester
+from ckanext.datajson.harvester_datajson import DataJsonHarvester
 
 import mock_datajson_source
 
