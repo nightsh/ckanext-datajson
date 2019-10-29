@@ -7,6 +7,9 @@ jobs:
       CKANVERSION=2.8
     steps:
       - run:
+          name: where am I
+          command: pwd && ls -la
+      - run:
           name: install
           command: /bin/travis-build.bash
       - run:
