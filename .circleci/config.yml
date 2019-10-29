@@ -2,8 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      # - image: circleci/python:2.7
-      - image: ubuntu-1404:201712-01
+      - image: circleci/classic:201708-01
     environment:
       CKANVERSION=2.8
     steps:
