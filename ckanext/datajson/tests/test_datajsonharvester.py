@@ -16,8 +16,9 @@ from ckan.plugins import toolkit
 
 # from ckanext.harvest.tests.factories import (HarvestSourceObj, HarvestJobObj,
 #                                              HarvestObjectObj)
-from ckanext.datajson.tests.factories import (HarvestSourceObj, HarvestJobObj,
-                                             HarvestObjectObj)
+from factories import (HarvestSourceObj,
+                       HarvestJobObj,
+                       HarvestObjectObj)
 
 import ckanext.harvest.model as harvest_model
 from ckanext.harvest.harvesters.base import HarvesterBase
