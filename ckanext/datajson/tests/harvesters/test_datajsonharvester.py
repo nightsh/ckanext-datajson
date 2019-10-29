@@ -14,10 +14,11 @@ except ImportError:
 from ckan import model
 from ckan.plugins import toolkit
 
-from ckanext.harvest.harvesters.ckanharvester import ContentFetchError
-from ckanext.harvest.tests.factories import (HarvestSourceObj, HarvestJobObj,
+# from ckanext.harvest.tests.factories import (HarvestSourceObj, HarvestJobObj,
+#                                              HarvestObjectObj)
+from ckanext.datajson.tests.factories import (HarvestSourceObj, HarvestJobObj,
                                              HarvestObjectObj)
-from ckanext.harvest.tests.lib import run_harvest
+
 import ckanext.harvest.model as harvest_model
 from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.datajson.harvester_datajson import DataJsonHarvester
@@ -85,8 +86,3 @@ class TestDataJSONHarvester(object):
     def test_datason_500(self):
         url = 'http://some500/data.json'
         self.run_source(url=url)
-
-    def test_harvest(self):
-        results_by_guid = run_harvest(
-            url='http://localhost:%s/' % mock_ckan.PORT,
-            harvester=CKANHarvester())    
