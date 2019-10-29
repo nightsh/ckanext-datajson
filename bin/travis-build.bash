@@ -7,6 +7,8 @@ echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
 sudo apt-get install solr-jetty libcommons-fileupload-java
 
+pip install --update setuptools
+
 # if [ $CKANVERSION == '2.8' ]
 # then
 # 	sudo apt-get install postgresql-9.6
