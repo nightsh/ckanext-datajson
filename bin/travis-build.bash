@@ -84,6 +84,5 @@ echo "-----------------------------------------------------------------"
 echo "Moving test.ini into a subdir..."
 mkdir subdir
 mv test.ini subdir
-paster datajson_harvest initdb -c subdir/test.ini
 
 echo "travis-build.bash is done."
