@@ -1,5 +1,5 @@
 import copy
-
+from urllib2 import URLError
 from nose.tools import assert_equal, assert_raises, assert_in
 import json
 from mock import patch, MagicMock, Mock
@@ -24,7 +24,7 @@ import ckanext.harvest.model as harvest_model
 from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.datajson.harvester_datajson import DataJsonHarvester
 import logging
-log = logging.getLogger("harvester")
+log = logging.getLogger(__name__)
 
 import mock_datajson_source
 
@@ -74,13 +74,20 @@ class TestDataJSONHarvester(object):
         dataset = model.Package.get(harvest_object.package_id)
         log.info('dataset name=%s', dataset.name)
 
+        return harvest_object, result, dataset
+
     def test_datason_usda(self):
         url = 'https://www.archive.arm.gov/metadata/data.json'
-        self.run_source(url=url)
+        harvest_object, result, dataset = self.run_source(url=url)
+
+        expected_title = "NCEP GFS: vertical profiles of met quantities at standard pressures, at Barrow"
+        assert dataset.title == expected_title
     
     def test_datason_arm(self):
         url = 'http://www.usda.gov/data.json'
-        self.run_source(url=url)
+        harvest_object, result, dataset = self.run_source(url=url)
+        expected_title = "Department of Agriculture Congressional Logs for Fiscal Year 2014"
+        assert dataset.title == expected_title
     
     def test_datason_404(self):
         url = 'http://some404/data.json'
