@@ -1,5 +1,5 @@
 import copy
-from 2ib2 import URLError
+from urllib2 import URLError
 from nose.tools import assert_equal, assert_raises, assert_in
 import json
 from mock import patch, MagicMock, Mock
