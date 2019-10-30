@@ -13,7 +13,7 @@ except ImportError:
     from ckan.new_tests.factories import Organization, Group
 from ckan import model
 from ckan.plugins import toolkit
-
+from ckan.lib.munge import munge_title_to_name
 # from ckanext.harvest.tests.factories import (HarvestSourceObj, HarvestJobObj,
 #                                              HarvestObjectObj)
 from factories import (HarvestSourceObj,
@@ -84,7 +84,7 @@ class TestDataJSONHarvester(object):
         expected_title = "NCEP GFS: vertical profiles of met quantities at standard pressures, at Barrow"
         assert_equal(dataset.title, expected_title)
         tags = [tag.name for tag in dataset.get_tags()]
-        assert_in("ORNL".lower(), tags)
+        assert_in(munge_title_to_name("ORNL"), tags)
         assert_equal(len(dataset.resources), 1)
     
     def test_datason_usda(self):
@@ -93,7 +93,7 @@ class TestDataJSONHarvester(object):
         expected_title = "Department of Agriculture Congressional Logs for Fiscal Year 2014"
         assert_equal(dataset.title, expected_title)
         tags = [tag.name for tag in dataset.get_tags()]
-        assert_in("Congressional Logs".lower(), tags)
+        assert_in(munge_title_to_name("Congressional Logs"), tags)
         assert_equal(len(dataset.resources), 1)
     
     def test_datason_404(self):
