@@ -63,7 +63,7 @@ git checkout master
 python setup.py develop
 pip install -r pip-requirements.txt
 pip install -r dev-requirements.txt
-paster harvester initdb -c ../ckan/test-core.ini
+paster harvester initdb -c test.ini
 cd -
 
 echo "Installing ckanext-datajson and its requirements..."
@@ -74,5 +74,6 @@ python setup.py develop
 echo "Moving test.ini into a subdir..."
 mkdir subdir
 mv test.ini subdir
+paster datajson_harvest initdb -c subdir/test.ini
 
 echo "travis-build.bash is done."
