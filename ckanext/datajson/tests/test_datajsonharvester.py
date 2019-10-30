@@ -24,7 +24,7 @@ import ckanext.harvest.model as harvest_model
 from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.datajson.harvester_datajson import DataJsonHarvester
 import logging
-log = logging.getLogger("ckanext.harvest.plugin")
+log = logging.getLogger("harvester")
 
 import mock_datajson_source
 
@@ -83,7 +83,8 @@ class TestDataJSONHarvester(object):
         # assert_equal(first element on list
         expected_title = "NCEP GFS: vertical profiles of met quantities at standard pressures, at Barrow"
         assert_equal(dataset.title, expected_title)
-        assert_in("ORNL", dataset.tags)
+        tags = [tag.name for tag in dataset.get_tags()]
+        assert_in("ORNL", tags)
         assert_equal(len(dataset.resources), 1)
     
     def test_datason_usda(self):
@@ -91,7 +92,8 @@ class TestDataJSONHarvester(object):
         harvest_object, result, dataset = self.run_source(url=url)
         expected_title = "Department of Agriculture Congressional Logs for Fiscal Year 2014"
         assert_equal(dataset.title, expected_title)
-        assert_in("Congressional Logs", dataset.tags)
+        tags = [tag.name for tag in dataset.get_tags()]
+        assert_in("Congressional Logs", tags)
         assert_equal(len(dataset.resources), 1)
     
     def test_datason_404(self):
