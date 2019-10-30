@@ -58,25 +58,18 @@ cd ..
 echo "Installing Harverter"
 git clone https://github.com/ckan/ckanext-harvest
 cd ckanext-harvest
-if [ $CKANVERSION == '2.8' ]
-then
-	git checkout master
-elif [ $CKANVERSION == '2.3' ]
-then
-	git checkout master
-fi
+git checkout master
 
 python setup.py develop
 pip install -r pip-requirements.txt
 pip install -r dev-requirements.txt
-
+paster harvester initdb -c ../ckan/test-core.ini
 cd -
 
 echo "Installing ckanext-datajson and its requirements..."
 cd ckanext-datajson
 pip install -r pip-requirements.txt
 python setup.py develop
-
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir

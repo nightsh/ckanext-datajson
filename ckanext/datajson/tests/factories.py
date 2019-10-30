@@ -4,8 +4,7 @@ try:
     from ckan.new_tests.factories import _get_action_user_name
 except ImportError:
     from ckan.tests.factories import _get_action_user_name
-
-import ckan.logic as logic
+from ckan.plugins import toolkit
 
 
 class HarvestSource(factory.Factory):
@@ -26,10 +25,10 @@ class HarvestSource(factory.Factory):
         # If there is an existing source for this URL, and we can't create
         # another source with that URL, just return the original one.
         try:
-            source_dict = logic.get_action('harvest_source_show')(
+            source_dict = toolkit.get_action('harvest_source_show')(
                 context, dict(url=kwargs['url']))
-        except Exception, e:
-            source_dict = logic.get_action('harvest_source_create')(
+        except (KeyError, toolkit.ObjectNotFound), e:
+            source_dict = toolkit.get_action('harvest_source_create')(
                 context, kwargs)
         if cls._return_type == 'dict':
             return source_dict
@@ -56,7 +55,7 @@ class HarvestJob(factory.Factory):
             kwargs['source_id'] = kwargs['source'].id
         if 'run' not in kwargs:
             kwargs['run'] = False
-        job_dict = logic.get_action('harvest_job_create')(
+        job_dict = toolkit.get_action('harvest_job_create')(
             context, kwargs)
         if cls._return_type == 'dict':
             return job_dict
@@ -86,7 +85,7 @@ class HarvestObject(factory.Factory):
         # Remove 'job' to avoid it getting added as a HarvestObjectExtra
         if 'job' in kwargs:
             kwargs.pop('job')
-        job_dict = logic.get_action('harvest_object_create')(
+        job_dict = toolkit.get_action('harvest_object_create')(
             context, kwargs)
         if cls._return_type == 'dict':
             return job_dict
