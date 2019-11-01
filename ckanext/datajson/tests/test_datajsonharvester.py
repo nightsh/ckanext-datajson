@@ -77,7 +77,7 @@ class TestDataJSONHarvester(object):
         return harvest_object, result, dataset
 
     def test_datason_arm(self):
-        url = 'https://www.archive.arm.gov/metadata/data.json'
+        url = 'http://127.0.0.1:%s/arm' % mock_datajson_source.PORT
         harvest_object, result, dataset = self.run_source(url=url)
 
         # assert_equal(first element on list
@@ -88,7 +88,7 @@ class TestDataJSONHarvester(object):
         assert_equal(len(dataset.resources), 1)
     
     def test_datason_usda(self):
-        url = 'http://www.usda.gov/data.json'
+        url = 'http://127.0.0.1:%s/usda' % mock_datajson_source.PORT
         harvest_object, result, dataset = self.run_source(url=url)
         expected_title = "Department of Agriculture Congressional Logs for Fiscal Year 2014"
         assert_equal(dataset.title, expected_title)
@@ -97,11 +97,11 @@ class TestDataJSONHarvester(object):
         assert_equal(len(dataset.resources), 1)
     
     def test_datason_404(self):
-        url = 'http://some404/data.json'
+        url = 'http://127.0.0.1:%s/404' % mock_datajson_source.PORT
         with assert_raises(URLError) as harvest_context:
             self.run_source(url=url)
         
     def test_datason_500(self):
-        url = 'http://some500/data.json'
+        url = 'http://127.0.0.1:%s/500' % mock_datajson_source.PORT
         with assert_raises(URLError) as harvest_context:
             self.run_source(url=url)

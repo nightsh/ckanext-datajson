@@ -21,16 +21,16 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.test_name = None
         self.sample_datajson_file = None
         self.samples_path = 'datajson-samples'
-        if self.path == 'https://www.archive.arm.gov/metadata/data.json':
+        if self.path == 'http://127.0.0.1:%s/arm' % PORT:
             self.sample_datajson_file = 'arm.data.json'
             self.test_name = 'arm'
-        elif self.path == 'http://www.usda.gov/data.json':
+        elif self.path == 'http://127.0.0.1:%s/usda' % PORT:
             self.sample_datajson_file = 'usda.gov.data.json'
             self.test_name = 'usda'
-        elif self.path == 'http://some404/data.json':
+        elif self.path == 'http://127.0.0.1:%s/404' % PORT:
             self.test_name = 'e404'
             self.respond('Not found', status=404)
-        elif self.path == 'http://some500/data.json':
+        elif self.path == 'http://127.0.0.1:%s/500' % PORT:
             self.test_name = 'e500'
             self.respond('Error', status=500)
         
