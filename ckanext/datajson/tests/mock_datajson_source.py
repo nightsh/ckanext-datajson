@@ -9,6 +9,8 @@ import urllib
 import SimpleHTTPServer
 import SocketServer
 from threading import Thread
+import logging
+log = logging.getLogger("harvester")
 
 PORT = 8998
 
@@ -35,6 +37,7 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.respond('Error', status=500)
         
         if self.sample_datajson_file is not None:
+            log.info('return json file {}'.format(self.sample_datajson_file))
             self.respond_json_sample_file(file_path=self.sample_datajson_file)
 
         if self.test_name == None:
@@ -70,7 +73,9 @@ def serve(port=PORT):
 
     httpd = TestServer(("", PORT), MockDataJSONHandler)
 
-    print('Serving test HTTP server at port {}'.format(PORT))
+    info = 'Serving test HTTP server at port {}'.format(PORT)
+    print(info)
+    log.info(info)
 
     httpd_thread = Thread(target=httpd.serve_forever)
     httpd_thread.setDaemon(True)
