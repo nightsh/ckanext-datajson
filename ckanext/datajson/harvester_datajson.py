@@ -37,7 +37,7 @@ class DataJsonHarvester(DatasetHarvesterBase):
                 datasets = json.load(urllib2.urlopen(req), 'iso-8859-1')
         except Exception, e:
             # remove BOM
-            log.error('trying to remove BOM. Error: {}'.format(e))
+            log.error('trying to remove BOM. Error: {}. Datsets: {}'.format(e, datasets))
             datasets = json.loads(lstrip_bom(urllib2.urlopen(req, context=ssl._create_unverified_context()).read()))
 
         # The first dataset should be for the data.json file itself. Check that
