@@ -24,7 +24,7 @@ import ckanext.harvest.model as harvest_model
 from ckanext.harvest.harvesters.base import HarvesterBase
 from ckanext.datajson.harvester_datajson import DataJsonHarvester
 import logging
-log = logging.getLogger("harvester")
+log = logging.getLogger(__name__)
 
 import mock_datajson_source
 

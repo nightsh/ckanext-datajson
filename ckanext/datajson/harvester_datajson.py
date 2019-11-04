@@ -1,6 +1,7 @@
 from ckanext.datajson.harvester_base import DatasetHarvesterBase
 from parse_datajson import parse_datajson_entry
-
+import logging
+log = logging.getLogger(__name__)
 
 import urllib2, json, ssl
 
@@ -19,6 +20,7 @@ class DataJsonHarvester(DatasetHarvesterBase):
         }
 
     def load_remote_catalog(self, harvest_job):
+        log.info('load_remote_catalog from: {}'.format(harvest_job.source.url))
         req = urllib2.Request(harvest_job.source.url)
         # todo: into config and across harvester
         req.add_header('User-agent', 'Data.gov/2.0')
@@ -26,12 +28,16 @@ class DataJsonHarvester(DatasetHarvesterBase):
             datasets = json.load(urllib2.urlopen(req))
         except UnicodeDecodeError:
             # try different encode
+            log.error('unicode error at {}'.format(harvest_job.source.url))
             try:
+                log.info('trying cp1252')
                 datasets = json.load(urllib2.urlopen(req), 'cp1252')
             except:
+                log.error('trying iso-8859-1')
                 datasets = json.load(urllib2.urlopen(req), 'iso-8859-1')
-        except:
+        except Exception, e:
             # remove BOM
+            log.error('trying to remove book. Error: {}'.format(e))
             datasets = json.loads(lstrip_bom(urllib2.urlopen(req, context=ssl._create_unverified_context()).read()))
 
         # The first dataset should be for the data.json file itself. Check that
