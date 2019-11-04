@@ -50,9 +50,10 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     
     def respond_json_sample_file(self, file_path, status=200):
         pt = os.path.join(self.samples_path, file_path)
-        data = json.load(open(pt, 'rb'))
-        log.info('mock respond {}'.format(data))
-        return self.respond(content=data, status=status,
+        data = open(pt, 'r')
+        content = data.read()
+        log.info('mock respond {}'.format(content[:90]))
+        return self.respond(content=content, status=status,
                             content_type='application/json')
 
     def respond(self, content, status=200, content_type='application/json'):
