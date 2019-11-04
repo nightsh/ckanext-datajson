@@ -12,7 +12,7 @@ from threading import Thread
 import logging
 log = logging.getLogger("harvester")
 
-PORT = 8998
+PORT = 8585
 
 
 class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
