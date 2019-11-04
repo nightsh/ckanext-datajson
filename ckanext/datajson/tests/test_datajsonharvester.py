@@ -30,10 +30,14 @@ import mock_datajson_source
 
 
 class TestDataJSONHarvester(object):
+    
+    @classmethod
+    def setup_class(cls):
+        mock_datajson_source.serve()
+
     @classmethod
     def setup(cls):
         # Start data json sources server we can test harvesting against it
-        mock_datajson_source.serve()
         reset_db()
         harvest_model.setup()
 
