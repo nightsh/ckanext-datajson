@@ -17,22 +17,23 @@ PORT = 8998
 
 class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
+        log.info('GET mock at: {}'.format(self.path))
         # test name is the first bit of the URL and makes CKAN behave
         # differently in some way.
         # Its value is recorded and then removed from the path
         self.test_name = None
         self.sample_datajson_file = None
         self.samples_path = 'datajson-samples'
-        if self.path == 'http://localhost:%s/arm' % PORT:
+        if self.path == 'http://127.0.0.1:%s/arm' % PORT:
             self.sample_datajson_file = 'arm.data.json'
             self.test_name = 'arm'
-        elif self.path == 'http://localhost:%s/usda' % PORT:
+        elif self.path == 'http://127.0.0.1:%s/usda' % PORT:
             self.sample_datajson_file = 'usda.gov.data.json'
             self.test_name = 'usda'
-        elif self.path == 'http://localhost:%s/404' % PORT:
+        elif self.path == 'http://127.0.0.1:%s/404' % PORT:
             self.test_name = 'e404'
             self.respond('Not found', status=404)
-        elif self.path == 'http://localhost:%s/500' % PORT:
+        elif self.path == 'http://127.0.0.1:%s/500' % PORT:
             self.test_name = 'e500'
             self.respond('Error', status=500)
         
@@ -40,7 +41,7 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             log.info('return json file {}'.format(self.sample_datajson_file))
             self.respond_json_sample_file(file_path=self.sample_datajson_file)
 
-        if self.test_name == None:
+        if self.test_name is None:
             self.respond('Mock DataJSON doesnt recognize that call', status=400)
 
     def respond_json(self, content_dict, status=200):
