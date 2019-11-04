@@ -23,7 +23,7 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # Its value is recorded and then removed from the path
         self.test_name = None
         self.sample_datajson_file = None
-        self.samples_path = 'datajson-samples'
+        self.samples_path = 'ckanext/datajson/tests/datajson-samples'
         if self.path == '/arm':
             self.sample_datajson_file = 'arm.data.json'
             self.test_name = 'arm'
