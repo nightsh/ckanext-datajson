@@ -33,6 +33,7 @@ class TestDataJSONHarvester(object):
     
     @classmethod
     def setup_class(cls):
+        log.info('Starting mock http server')
         mock_datajson_source.serve()
 
     @classmethod
