@@ -25,14 +25,27 @@ cd .. # CircleCI starts inside ckanext-datajson folder
 pwd
 ls -la
 
-git clone https://github.com/ckan/ckan
-cd ckan
+
 if [ $CKANVERSION == '2.8' ]
 then
+	git clone https://github.com/ckan/ckan
+	cd ckan
 	git checkout master
 elif [ $CKANVERSION == '2.3' ]
 then
+	git clone https://github.com/ckan/ckan
+	cd ckan
 	git checkout release-v2.3
+elif [ $CKANVERSION == 'inventory' ]
+then
+	git clone https://github.com/GSA/ckan
+	cd ckan
+	git checkout inventory
+elif [ $CKANVERSION == 'datagov' ]
+then
+	git clone https://github.com/GSA/ckan
+	cd ckan
+	git checkout datagov
 fi
 python setup.py develop
 cp ./ckan/public/base/css/main.css ./ckan/public/base/css/main.debug.css
