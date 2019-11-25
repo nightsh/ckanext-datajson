@@ -1,3 +1,4 @@
+wheel
 pyyaml
 lepl
 jsonschema==2.4.0
