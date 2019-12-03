@@ -143,7 +143,8 @@ class TestDataJSONHarvester(object):
                 assert 'annual-performance-report' in tags
                 assert 'financial-reports' in tags
                 assert 'ovaes-gpra-goals-for-adult-education' in tags
-    
+
+    """ try to detect SSL error
     def test_datason_real_ed(self):
         url = 'https://www2.ed.gov/data.json'
         log.info('Testing www2.ed.gov/data.json')
@@ -159,8 +160,8 @@ class TestDataJSONHarvester(object):
                 assert 'annual-performance-report' in tags
                 assert 'financial-reports' in tags
                 assert 'ovaes-gpra-goals-for-adult-education' in tags
-                raise ValueError('pepe91')
-
+    """
+    
     def test_datason_defense_bad_charset(self):
         url = 'http://127.0.0.1:%s/defense' % mock_datajson_source.PORT
         log.info('Testing defense.gov/data.json')
