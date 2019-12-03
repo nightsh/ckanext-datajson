@@ -32,7 +32,10 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.test_name = 'usda'
         elif self.path == '/ed':
             self.sample_datajson_file = 'www2.ed.gov.data.json'
-            self.test_name = 'usda'
+            self.test_name = 'ed'
+        elif self.path == '/defense':
+            self.sample_datajson_file = 'www.defense.gov.data.json'
+            self.test_name = 'defense'
         elif self.path == '/404':
             self.test_name = 'e404'
             self.respond('Not found', status=404)
