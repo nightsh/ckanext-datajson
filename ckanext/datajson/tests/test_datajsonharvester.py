@@ -119,12 +119,14 @@ class TestDataJSONHarvester(object):
     def test_datason_404(self):
         url = 'http://127.0.0.1:%s/404' % mock_datajson_source.PORT
         with assert_raises(URLError) as harvest_context:
-            self.run_source(url=url)
+            for harvest_object, result, dataset in self.run_source(url=url):
+                pass
         
     def test_datason_500(self):
         url = 'http://127.0.0.1:%s/500' % mock_datajson_source.PORT
         with assert_raises(URLError) as harvest_context:
-            self.run_source(url=url)
+            for harvest_object, result, dataset in self.run_source(url=url):
+                pass
         
     def test_datason_ed(self):
         url = 'http://127.0.0.1:%s/ed' % mock_datajson_source.PORT
@@ -136,6 +138,7 @@ class TestDataJSONHarvester(object):
             log.info('Result: {}'.format(result))
             
             if dataset.title == 'National Reporting System for Adult Education, 2007-08':
+                # "keyword": [ "Annual Performance Report", "Financial Reports", "OVAE's GPRA goals for adult education", "Adult literacy"],
                 assert 'adult-literacy' in tags
                 assert 'annual-performance-report' in tags
                 assert 'financial-reports' in tags
