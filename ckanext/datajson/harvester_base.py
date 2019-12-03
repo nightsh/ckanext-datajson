@@ -3,7 +3,7 @@ from ckan import model
 from ckan import plugins as p
 from ckan.model import Session, Package
 from ckan.logic import ValidationError, NotFound, get_action
-from ckan.lib.munge import munge_title_to_name
+from ckan.lib.munge import munge_title_to_name, munge_tag
 from ckan.lib.search.index import PackageSearchIndex
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.lib.navl.validators import ignore_empty
@@ -651,7 +651,9 @@ class DatasetHarvesterBase(HarvesterBase):
         
         # fix for tag_string
         if 'tags' in pkg:
-            pkg['tag_string'] = ''
+            cleaned_tags = [munge_tag(tag) for tag in pkg['tags']]
+            pkg['tag_string'] = ','.join(cleaned_tags)
+            
 
         # pick a fix number of unmapped entries and put into extra
         if unmapped:
