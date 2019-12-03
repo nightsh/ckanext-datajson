@@ -30,12 +30,12 @@ class DataJsonHarvester(DatasetHarvesterBase):
         try:
             conn = urllib2.urlopen(req)
         except Exception, e:
-            log.error('Failed to connect to {}: {}'.format(url, e))
+            log.error('Failed to connect to {}: {} ({})'.format(url, e, type(e)))
             # try to avoid SSL errors
             try:
                 conn = urllib2.urlopen(req, context=ssl._create_unverified_context())
             except Exception as e:
-                log.error('Failed (SSL) to connect to {}: {}'.format(url, e))
+                log.error('Failed (SSL) to connect to {}: {} ({})'.format(url, e, type(e)))
                 raise
 
         data_readed = conn.read()

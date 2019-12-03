@@ -5,7 +5,9 @@ import json
 import re
 import copy
 import urllib
+import ssl
 
+from urllib2 import URLError
 import SimpleHTTPServer
 import SocketServer
 from threading import Thread
@@ -16,8 +18,16 @@ PORT = 8998
 
 
 class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+
+    counter = {}
+
     def do_GET(self):
-        log.info('GET mock at: {}'.format(self.path))
+
+        if self.path not in self.counter.keys():
+            self.counter[self.path] = 0
+        self.counter[self.path] += 1
+        log.info('GET mock at path {} ({})'.format(self.path, self.counter[self.path]))
+
         # test name is the first bit of the URL and makes CKAN behave
         # differently in some way.
         # Its value is recorded and then removed from the path
@@ -42,6 +52,16 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         elif self.path == '/500':
             self.test_name = 'e500'
             self.respond('Error', status=500)
+        elif self.path == '/ssl-certificate-error':
+            log.info('HEADERS: {}'.format(self.headers))
+            # TODO learn how to detect context at this http request
+            # by now we raise error first time and a godd response the second time
+            context = ssl._create_unverified_context if self.counter[self.path] > 1 else None    
+            if context == ssl._create_unverified_context:
+                self.sample_datajson_file = 'www2.ed.gov.data.json'
+                self.test_name = 'ed'
+            else:
+                raise URLError('certificate verify failed')
         
         if self.sample_datajson_file is not None:
             log.info('return json file {}'.format(self.sample_datajson_file))
@@ -72,10 +92,6 @@ class MockDataJSONHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 def serve(port=PORT):
     '''Runs a CKAN-alike app (over HTTP) that is used for harvesting tests'''
-
-    # Choose the directory to serve files from
-    # os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-    #                      'mock_ckan_files'))
 
     class TestServer(SocketServer.TCPServer):
         allow_reuse_address = True
