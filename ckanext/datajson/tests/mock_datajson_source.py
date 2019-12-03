@@ -10,7 +10,7 @@ import SimpleHTTPServer
 import SocketServer
 from threading import Thread
 import logging
-log = logging.getLogger("harvester")
+log = logging.getLogger(__name__)
 
 PORT = 8998
 

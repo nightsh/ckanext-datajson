@@ -22,7 +22,7 @@ from sqlalchemy.exc import IntegrityError
 from .helpers import reverse_accrual_periodicity_dict
 
 import logging
-log = logging.getLogger("harvester")
+log = logging.getLogger(__name__)
 
 VALIDATION_SCHEMA = [
                         ('', 'Project Open Data (Federal)'),

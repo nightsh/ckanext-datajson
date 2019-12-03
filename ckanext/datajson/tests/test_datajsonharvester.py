@@ -143,3 +143,38 @@ class TestDataJSONHarvester(object):
                 assert 'annual-performance-report' in tags
                 assert 'financial-reports' in tags
                 assert 'ovaes-gpra-goals-for-adult-education' in tags
+    
+    def test_datason_real_ed(self):
+        url = 'https://www2.ed.gov/data.json'
+        log.info('Testing www2.ed.gov/data.json')
+        for harvest_object, result, dataset in self.run_source(url=url, limit=10):
+            log.info('Dataset: {}'.format(dataset))
+            tags = [tag.name for tag in dataset.get_tags()]
+            log.info('Tags: {}'.format(tags))
+            log.info('Result: {}'.format(result))
+            
+            if dataset.title == 'National Reporting System for Adult Education, 2007-08':
+                # "keyword": [ "Annual Performance Report", "Financial Reports", "OVAE's GPRA goals for adult education", "Adult literacy"],
+                assert 'adult-literacy' in tags
+                assert 'annual-performance-report' in tags
+                assert 'financial-reports' in tags
+                assert 'ovaes-gpra-goals-for-adult-education' in tags
+                raise ValueError('pepe91')
+
+    """
+    # TODO mock this charset errors
+    def test_bad_charset(self):
+        urls_without_utf8 = ['http://www.defense.gov/data.json',
+                             'http://www.nrc.gov/data.json',
+                             'http://www.usitc.gov/data.json'
+                             ]
+        for url in urls_without_utf8:
+            log.info('Testing {}'.format(url))
+            for harvest_object, result, dataset in self.run_source(url=url, limit=10):
+                log.info('Dataset: {}'.format(dataset))
+                tags = [tag.name for tag in dataset.get_tags()]
+                log.info('Tags: {}'.format(tags))
+                log.info('Result: {}'.format(result))
+    
+        raise ValueError('pepe92')
+    """
