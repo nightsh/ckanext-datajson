@@ -108,7 +108,7 @@ class TestDataJSONHarvester(object):
         url = 'http://127.0.0.1:%s/usda' % mock_datajson_source.PORT
 
         # just the firs one
-        for harvest_object, result, dataset in self.run_source(url=url):
+        for harvest_object, result, dataset in self.run_source(url=url, limit=20):
             expected_title = "Department of Agriculture Congressional Logs for Fiscal Year 2014"
             assert_equal(dataset.title, expected_title)
             tags = [tag.name for tag in dataset.get_tags()]
@@ -131,7 +131,7 @@ class TestDataJSONHarvester(object):
     def test_datason_ed(self):
         url = 'http://127.0.0.1:%s/ed' % mock_datajson_source.PORT
         
-        for harvest_object, result, dataset in self.run_source(url=url, limit=10):
+        for harvest_object, result, dataset in self.run_source(url=url, limit=20):
             log.info('Dataset: {}'.format(dataset))
             tags = [tag.name for tag in dataset.get_tags()]
             log.info('Tags: {}'.format(tags))
@@ -147,7 +147,7 @@ class TestDataJSONHarvester(object):
     def test_ssl_fail(self):
         url = 'http://127.0.0.1:%s/ssl-certificate-error' % mock_datajson_source.PORT
         log.info('Testing SSL error')
-        for harvest_object, result, dataset in self.run_source(url=url, limit=10):
+        for harvest_object, result, dataset in self.run_source(url=url, limit=20):
             log.info('Dataset: {}'.format(dataset))
             tags = [tag.name for tag in dataset.get_tags()]
             log.info('Tags: {}'.format(tags))
@@ -163,7 +163,7 @@ class TestDataJSONHarvester(object):
     def test_datason_defense_bad_charset(self):
         url = 'http://127.0.0.1:%s/defense' % mock_datajson_source.PORT
         log.info('Testing defense.gov/data.json')
-        for harvest_object, result, dataset in self.run_source(url=url, limit=10):
+        for harvest_object, result, dataset in self.run_source(url=url, limit=20):
             log.info('Dataset: {}'.format(dataset))
             tags = [tag.name for tag in dataset.get_tags()]
             log.info('Tags: {}'.format(tags))
