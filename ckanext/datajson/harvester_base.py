@@ -1,3 +1,4 @@
+import re
 from ckan.lib.base import c
 from ckan import model
 from ckan import plugins as p
@@ -28,6 +29,16 @@ VALIDATION_SCHEMA = [
                         ('', 'Project Open Data (Federal)'),
                         ('non-federal', 'Project Open Data (Non-Federal)'),
                     ]
+
+
+def clean_tags(tags):
+    ret = []
+    pattern = re.compile('[^A-Za-z0-9\s_\-!?]+')
+    for tag in tags:
+        cleaned = pattern.sub('', tag)
+        ret.append(cleaned.strip())
+    return ret
+
 
 def validate_schema(schema):
     if schema not in [s[0] for s in VALIDATION_SCHEMA]:
@@ -651,9 +662,9 @@ class DatasetHarvesterBase(HarvesterBase):
         
         # fix for tag_string
         if 'tags' in pkg:
-            cleaned_tags = [munge_tag(tag) for tag in pkg['tags']]
+            tags = pkg['tags']
+            cleaned_tags = clean_tags(tags)
             pkg['tag_string'] = ','.join(cleaned_tags)
-            
 
         # pick a fix number of unmapped entries and put into extra
         if unmapped:
