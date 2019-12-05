@@ -35,8 +35,9 @@ def clean_tags(tags):
     ret = []
     pattern = re.compile('[^A-Za-z0-9\s_\-!?]+')
     for tag in tags:
-        cleaned = pattern.sub('', tag)
-        ret.append(cleaned.strip())
+        cleaned = pattern.sub('', tag).strip()
+        if cleaned != '':
+            ret.append(cleaned)
     return ret
 
 
@@ -664,7 +665,7 @@ class DatasetHarvesterBase(HarvesterBase):
         if 'tags' in pkg:
             tags = pkg['tags']
             cleaned_tags = clean_tags(tags)
-            pkg['tag_string'] = ','.join(cleaned_tags)
+            pkg['tag_string'] = ', '.join(cleaned_tags)
 
         # pick a fix number of unmapped entries and put into extra
         if unmapped:

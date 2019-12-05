@@ -138,11 +138,20 @@ class TestDataJSONHarvester(object):
             log.info('Result: {}'.format(result))
             
             if dataset.title == 'National Reporting System for Adult Education, 2007-08':
-                # "keyword": [ "Annual Performance Report", "Financial Reports", "OVAE's GPRA goals for adult education", "Adult literacy"],
+                log.info('Found: Academic Libraries Survey, 2010')
                 assert 'adult-literacy' in tags
                 assert 'annual-performance-report' in tags
                 assert 'financial-reports' in tags
                 assert 'ovaes-gpra-goals-for-adult-education' in tags
+                # "keyword": [ "Annual Performance Report", "Financial Reports", "OVAE's GPRA goals for adult education", "Adult literacy"],
+                expected_tag_string = 'Annual Performance Report, Financial Reports, OVAEs GPRA goals for adult education, Adult literacy'
+                assert dataset.tag_string == expected_tag_string
+
+            if dataset.title == 'Academic Libraries Survey, 2010':
+                log.info('Found: Academic Libraries Survey, 2010')
+                # "keyword": [ "Research libraries", "Research librarians", "University libraries", "College libraries", "University librarians", "College librarians" ],
+                expected_tag_string = 'Research libraries, Research librarians, University libraries, College libraries, University librarians, College librarians'
+                assert dataset.tag_string == expected_tag_string
 
     def test_ssl_fail(self):
         url = 'http://127.0.0.1:%s/ssl-certificate-error' % mock_datajson_source.PORT
