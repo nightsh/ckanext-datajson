@@ -13,6 +13,8 @@ Start CKAN (with harvest and datajson extensions)
 docker-compose -f docker-compose.dev.yml up
 ```
 
+![clean CKAN](clean-ckan.png)
+
 First we need to create an organization.  
 Create a harvest source pointing to https://www2.ed.gov/data.json.  
 Get inside terminal:
@@ -63,8 +65,8 @@ Finish job (not finishing by it self)
 paster --plugin=ckanext-harvest harvester job_abort dep-of-ed-test
 ```
 
-View results
-http://ckan:5000/harvest/admin/dep-of-ed-test
+View results: http://ckan:5000/harvest/admin/dep-of-ed-test  
+
 ![harvest finished](harvest-depofed-finished.png)
 
 Errors:
