@@ -35,9 +35,15 @@ def clean_tags(tags):
     ret = []
     pattern = re.compile('[^A-Za-z0-9\s_\-!?]+')
     for tag in tags:
-        cleaned = pattern.sub('', tag).strip()
-        if cleaned != '':
-            ret.append(cleaned)
+        tag = pattern.sub('', tag).strip()
+        if len(tag) > MAX_TAG_LENGTH:
+            log.error('tag is long, cutting: {}'.format(tag))
+            tag = tag[:MAX_TAG_LENGTH]
+        elif len(tag) < MIN_TAG_LENGTH:
+            log.error('tag is short: {}'.format(tag))
+            tag += '_' * (MIN_TAG_LENGTH - len(tag))
+        if tag != '':
+            ret.append(tag)
     return ret
 
 
@@ -664,15 +670,9 @@ class DatasetHarvesterBase(HarvesterBase):
         # fix for tag_string
         if 'tags' in pkg:
             tags = pkg['tags']
+            log.info('Tags: {}'.format(tags))
             cleaned_tags = clean_tags(tags)
             tag_string = ', '.join(cleaned_tags)
-            
-            if len(tag_string) > MAX_TAG_LENGTH:
-                tag_string = tag_string[:MAX_TAG_LENGTH]
-            
-            if len(tag_string) > MIN_TAG_LENGTH:
-                tag_string += '_' * (MIN_TAG_LENGTH - len(tag_string))
-
             pkg['tag_string'] = tag_string
 
         # pick a fix number of unmapped entries and put into extra
