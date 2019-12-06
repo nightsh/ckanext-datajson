@@ -8,7 +8,7 @@ from ckan.lib.munge import munge_title_to_name, munge_tag
 from ckan.lib.search.index import PackageSearchIndex
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.lib.navl.validators import ignore_empty
-
+from ckan.model import MAX_TAG_LENGTH, MIN_TAG_LENGTH
 from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError, \
                                     HarvestObjectError, HarvestObjectExtra
 from ckanext.harvest.harvesters.base import HarvesterBase
@@ -665,7 +665,15 @@ class DatasetHarvesterBase(HarvesterBase):
         if 'tags' in pkg:
             tags = pkg['tags']
             cleaned_tags = clean_tags(tags)
-            pkg['tag_string'] = ', '.join(cleaned_tags)
+            tag_string = ', '.join(cleaned_tags)
+            
+            if len(tag_string) > MAX_TAG_LENGTH:
+                tag_string = tag_string[:MAX_TAG_LENGTH]
+            
+            if len(tag_string) > MIN_TAG_LENGTH:
+                tag_string += '_' * (MIN_TAG_LENGTH - len(tag_string))
+
+            pkg['tag_string'] = tag_string
 
         # pick a fix number of unmapped entries and put into extra
         if unmapped:
