@@ -16,7 +16,13 @@ docker-compose -f docker-compose.dev.yml up
 ![clean CKAN](clean-ckan.png)
 
 First we need to create an organization.  
+
+![Createing org](creating-org.png)
+
 Create a harvest source pointing to https://www2.ed.gov/data.json.  
+
+![Creating harvest source](creating-harvest-source.png)
+
 Get inside terminal:
 ```
 docker-compose -f docker-compose.dev.yml exec ckan-dev bash
@@ -71,6 +77,6 @@ View results: http://ckan:5000/harvest/admin/dep-of-ed-test
 
 Errors:
  - If we re-harvest this same source the packages duplicates
- - 
+ - Define if all Tags go to lower in order to avoid duplication
 
 
