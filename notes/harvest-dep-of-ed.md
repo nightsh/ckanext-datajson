@@ -64,6 +64,11 @@ Note the duplicates and cleaned BOM_UTF8
 Fetch and import
 ```
 paster --plugin=ckanext-harvest harvester fetch_consumer
+
+2019-12-06 13:49:40,843 INFO  [ckanext.harvest.queue] Received harvest object id: 92e17c10-ae7e-48af-a61f-ba8b8b8199dc
+2019-12-06 13:49:40,863 DEBUG [ckanext.datajson.harvester_base] In <Plugin DataJsonHarvester 'datajson_harvest'> import_stage
+2019-12-06 13:49:41,963 INFO  [ckanext.datajson.harvester_base] Tags: [u'Research libraries', u'Research librarians', u'University libraries', u'College libraries', u'University librarians', u'College librarians']
+2019-12-06 13:49:42,558 WARNI [ckanext.datajson.harvester_base] created package academic-libraries-survey-2004 (b778c898-9824-4b5c-8b6a-00e9175ab7f1) from https://www2.ed.gov/data.json
 ```
 
 Finish job (not finishing by it self)
