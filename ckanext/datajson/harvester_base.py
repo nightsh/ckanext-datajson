@@ -34,6 +34,7 @@ VALIDATION_SCHEMA = [
 def clean_tags(tags):
     ret = []
     pattern = re.compile('[^A-Za-z0-9\s_\-!?]+')
+    
     for tag in tags:
         tag = pattern.sub('', tag).strip()
         if len(tag) > MAX_TAG_LENGTH:
@@ -43,7 +44,7 @@ def clean_tags(tags):
             log.error('tag is short: {}'.format(tag))
             tag += '_' * (MIN_TAG_LENGTH - len(tag))
         if tag != '':
-            ret.append(tag.capitalize())
+            ret.append(tag.lower().replace(' ', '-'))  # copyin CKAN behaviour
     return ret
 
 
@@ -723,6 +724,7 @@ class DatasetHarvesterBase(HarvesterBase):
             
             log.warn('updating package %s (%s) from %s' % (pkg["name"], pkg["id"], harvest_object.source.url))
             pkg = get_action('package_update')(self.context(), pkg)
+            log.info('Package updated {}'.format(pkg))
         else:
             # It doesn't exist yet. Create a new one.
             pkg['name'] = self.make_package_name(dataset_processed["title"], harvest_object.guid)
@@ -739,6 +741,7 @@ class DatasetHarvesterBase(HarvesterBase):
             except:
                 log.error('failed to create package %s from %s' % (pkg["name"], harvest_object.source.url))
                 raise
+            log.info('Package created {}'.format(pkg))
 
         # Flag the other HarvestObjects linking to this package as not current anymore
         for ob in model.Session.query(HarvestObject).filter_by(package_id=pkg["id"]):

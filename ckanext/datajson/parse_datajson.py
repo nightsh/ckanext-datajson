@@ -1,12 +1,16 @@
 from ckan.lib.munge import munge_title_to_name
-
+import logging
 import re
+
+
+log = logging.getLogger(__name__)
+
 
 def parse_datajson_entry(datajson, package, defaults, schema_version):
   # four fields need extra handling, which are
   # 1.tag, 2.license, 3.maintainer_email, 4.publisher_hierarchy,
   # 5.resources
-
+  log.info('Parsing datajson entry: {}'.format(package))
   # 1. package["tags"]
   package["tags"] = [ { "name": munge_title_to_name(t) } for t in
     package.get("tags", "") if t.strip() != ""]
@@ -142,6 +146,8 @@ def parse_datajson_entry(datajson, package, defaults, schema_version):
         r['accessURL'] = accessurl_value
 
       package["resources"].append(r)
+  
+  log.info('Finished Parsing datajson entry: {}'.format(package))
 
 def extra(package, key, value):
   if not value: return

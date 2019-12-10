@@ -1,5 +1,6 @@
 from ckanext.datajson.harvester_base import DatasetHarvesterBase
 from parse_datajson import parse_datajson_entry
+from parse_dep_of_ed import parse_datajson_entry_for_dep_of_ed_schema
 import logging
 log = logging.getLogger(__name__)
 
@@ -85,6 +86,7 @@ class DataJsonHarvester(DatasetHarvesterBase):
         
     def set_dataset_info(self, pkg, dataset, dataset_defaults, schema_version):
         parse_datajson_entry(dataset, pkg, dataset_defaults, schema_version)
+        parse_datajson_entry_for_dep_of_ed_schema(dataset, pkg, dataset_defaults, schema_version)
 
 # helper function to remove BOM
 def lstrip_bom(str_):
