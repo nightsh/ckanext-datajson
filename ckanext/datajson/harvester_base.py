@@ -316,7 +316,7 @@ class DatasetHarvesterBase(HarvesterBase):
                     and dataset['identifier'] not in existing_parents_demoted \
                     and dataset['identifier'] not in existing_datasets_promoted \
                     and self.find_extra(pkg, "source_hash") == self.make_upstream_content_hash(dataset, harvest_job.source, catalog_extras, schema_version):
-                    log.info('Package {} don\'t need update. Leave'.format(pkg.id))
+                    log.info('Package {} don\'t need update. Leave'.format(pkg['id']))
                     continue
             else:
                 pkg_id = uuid.uuid4().hex
