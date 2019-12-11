@@ -182,6 +182,7 @@ class DatasetHarvesterBase(HarvesterBase):
         # Added: mark all existing parent datasets.
         existing_datasets = { }
         existing_parents = { }
+        log.info('Reading previously harvested packages from this source')
         for hobj in model.Session.query(HarvestObject).filter_by(source=harvest_job.source, current=True):
             try:
                 pkg = get_action('package_show')(self.context(), { "id": hobj.package_id })
@@ -191,7 +192,10 @@ class DatasetHarvesterBase(HarvesterBase):
             sid = self.find_extra(pkg, "identifier")
             is_parent = self.find_extra(pkg, "collection_metadata")
             if sid:
+                log.info('Identifier: {} (ID:{})'.format(sid, pkg['id']))
                 existing_datasets[sid] = pkg
+            else:
+                log.info('The dataset has no identifier:{}'.format(pkg))
             if is_parent and pkg.get("state") == "active":
                 existing_parents[sid] = pkg
 
@@ -312,9 +316,11 @@ class DatasetHarvesterBase(HarvesterBase):
                     and dataset['identifier'] not in existing_parents_demoted \
                     and dataset['identifier'] not in existing_datasets_promoted \
                     and self.find_extra(pkg, "source_hash") == self.make_upstream_content_hash(dataset, harvest_job.source, catalog_extras, schema_version):
+                    log.info('Package {} don\'t need update. Leave'.format(pkg.id))
                     continue
             else:
                 pkg_id = uuid.uuid4().hex
+                log.info('Package (identifier:{}) is new, it will be created as {}'.format(dataset['identifier'], pkg_id))
 
             # Create a new HarvestObject and store in it the GUID of the
             # existing dataset (if it exists here already) and the dataset's
@@ -503,7 +509,8 @@ class DatasetHarvesterBase(HarvesterBase):
             "modified": "modified", # ! revision_timestamp
             "publisher": {"name": "publisher"}, # !owner_org
             "contactPoint": {"fn":"contact_name", "hasEmail":"contact_email"},
-            "identifier": "unique_id", # !id
+            # for USMetadata "identifier": "unique_id", # !id
+            "identifier": "extras__identifier",
             "accessLevel": "public_access_level",
 
             "bureauCode": "bureau_code[]",
