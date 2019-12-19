@@ -1,7 +1,9 @@
 from ckanext.datajson.harvester_base import DatasetHarvesterBase
 from parse_datajson import parse_datajson_entry
+# from parse_dep_of_ed import parse_datajson_entry_for_dep_of_ed_schema
 import logging
 log = logging.getLogger(__name__)
+
 
 import urllib2, json, ssl
 
@@ -20,25 +22,48 @@ class DataJsonHarvester(DatasetHarvesterBase):
         }
 
     def load_remote_catalog(self, harvest_job):
-        log.info('load_remote_catalog from: {}'.format(harvest_job.source.url))
-        req = urllib2.Request(harvest_job.source.url)
+        url = harvest_job.source.url
+        log.info('Loading catalog from URL: {}'.format(url))
+        req = urllib2.Request(url)
         # todo: into config and across harvester
         req.add_header('User-agent', 'Data.gov/2.0')
+
         try:
-            datasets = json.load(urllib2.urlopen(req))
+            conn = urllib2.urlopen(req)
+        except Exception, e:
+            log.error('Failed to connect to {}: {} ({})'.format(url, e, type(e)))
+            # try to avoid SSL errors
+            try:
+                conn = urllib2.urlopen(req, context=ssl._create_unverified_context())
+            except Exception as e:
+                log.error('Failed (SSL) to connect to {}: {} ({})'.format(url, e, type(e)))
+                raise
+
+        data_readed = conn.read()
+        # remove BOM_UTF8 if exists
+        clean_data_readed, bom_removed = lstrip_bom(data_readed)
+        if bom_removed:
+            log.info('BOM_UTF8 removed from URL: {}'.format(url))
+
+        try:
+            datasets = json.loads(clean_data_readed)
         except UnicodeDecodeError:
             # try different encode
-            log.error('unicode error at {}'.format(harvest_job.source.url))
-            try:
-                log.info('trying cp1252')
-                datasets = json.load(urllib2.urlopen(req), 'cp1252')
-            except:
-                log.error('trying iso-8859-1')
-                datasets = json.load(urllib2.urlopen(req), 'iso-8859-1')
-        except Exception, e:
-            # remove BOM
-            log.error('trying to remove BOM. Error: {}.'.format(e))
-            datasets = json.loads(lstrip_bom(urllib2.urlopen(req, context=ssl._create_unverified_context()).read()))
+            log.error('Unicode Error at {}'.format(url))
+            charsets = ['cp1252', 'iso-8859-1']
+            datasets = None
+            for charset in charsets:
+                try:
+                    data_decoded = clean_data_readed.decode(charset)
+                    datasets = json.loads(data_decoded)
+                    log.info('Charset detected {} for {}'.format(charset, url))
+                    break
+                except:
+                    log.error('Failed to load URL {} with {} charset'.format(url, charset))
+            
+            if datasets is None:
+                raise ValueError('Unable to decode data from {}. Charsets: utf8, {}'.format(url, charsets))
+        
 
         # The first dataset should be for the data.json file itself. Check that
         # it is, and if so rewrite the dataset's title because Socrata exports
@@ -56,16 +81,18 @@ class DataJsonHarvester(DatasetHarvesterBase):
             catalog_values = datasets.copy()
             datasets = catalog_values.pop("dataset", [])
 
+        log.info('Catalog Loaded from URL: {}: {} datasets found'.format(url, len(datasets)))
         return (datasets, catalog_values)
         
     def set_dataset_info(self, pkg, dataset, dataset_defaults, schema_version):
         parse_datajson_entry(dataset, pkg, dataset_defaults, schema_version)
+        # parse_datajson_entry_for_dep_of_ed_schema(dataset, pkg, dataset_defaults, schema_version)
 
 # helper function to remove BOM
 def lstrip_bom(str_):
     from codecs import BOM_UTF8
     bom = BOM_UTF8
     if str_.startswith(bom):
-        return str_[len(bom):]
+        return str_[len(bom):], True
     else:
-        return str_
+        return str_, False

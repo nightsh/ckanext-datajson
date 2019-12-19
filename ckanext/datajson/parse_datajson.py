@@ -1,15 +1,22 @@
 from ckan.lib.munge import munge_title_to_name
-
+import logging
 import re
+
+
+log = logging.getLogger(__name__)
+
 
 def parse_datajson_entry(datajson, package, defaults, schema_version):
   # four fields need extra handling, which are
   # 1.tag, 2.license, 3.maintainer_email, 4.publisher_hierarchy,
   # 5.resources
-
+  log.info('Parsing datajson entry: {}'.format(package))
   # 1. package["tags"]
   package["tags"] = [ { "name": munge_title_to_name(t) } for t in
     package.get("tags", "") if t.strip() != ""]
+
+
+
 
   # 2. package["license"]
   licenses = {
@@ -29,11 +36,11 @@ def parse_datajson_entry(datajson, package, defaults, schema_version):
     'Other (Public Domain)':'other-pd',
     'UK Open Government Licence (OGL)':'uk-ogl',
 
-    # add more to complete the list 
+    # add more to complete the list
     'U.S. Public Domain Works':'us-pd',
     'www.usa.gov/publicdomain/label/1.0':'us-pd',
 
-    # url (without protocol and trailing slash ) can also be used as key 
+    # url (without protocol and trailing slash ) can also be used as key
     'creativecommons.org/licenses/by/4.0':'cc-by',
     'creativecommons.org/licenses/by-sa/4.0':'cc-by-sa',
     'creativecommons.org/publicdomain/zero/1.0':'cc-zero',
@@ -63,6 +70,11 @@ def parse_datajson_entry(datajson, package, defaults, schema_version):
   if package.get("maintainer_email"):
     package["maintainer_email"] = \
       package.get("maintainer_email").replace("mailto:", "", 1)
+
+  # 3. package["maintainer_email"]
+  if package.get("contact_email"):
+    package["contact_email"] = \
+      package.get("contact_email").replace("mailto:", "", 1)
 
   # 4. extras-publisher and extras-publisher_hierarchy
   if schema_version == '1.1':
@@ -134,6 +146,8 @@ def parse_datajson_entry(datajson, package, defaults, schema_version):
         r['accessURL'] = accessurl_value
 
       package["resources"].append(r)
+  
+  log.info('Finished Parsing datajson entry: {}'.format(package))
 
 def extra(package, key, value):
   if not value: return

@@ -1,13 +1,14 @@
+import re
 from ckan.lib.base import c
 from ckan import model
 from ckan import plugins as p
 from ckan.model import Session, Package
 from ckan.logic import ValidationError, NotFound, get_action
-from ckan.lib.munge import munge_title_to_name
+from ckan.lib.munge import munge_title_to_name, munge_tag
 from ckan.lib.search.index import PackageSearchIndex
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.lib.navl.validators import ignore_empty
-
+from ckan.model import MAX_TAG_LENGTH, MIN_TAG_LENGTH
 from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError, \
                                     HarvestObjectError, HarvestObjectExtra
 from ckanext.harvest.harvesters.base import HarvesterBase
@@ -18,14 +19,34 @@ from jsonschema.validators import Draft4Validator
 from jsonschema import FormatChecker
 
 from sqlalchemy.exc import IntegrityError
-from ckanext.datajson.helpers import reverse_accrual_periodicity_dict
+
+from .helpers import reverse_accrual_periodicity_dict
+
 import logging
-log = logging.getLogger("harvester")
+log = logging.getLogger(__name__)
 
 VALIDATION_SCHEMA = [
                         ('', 'Project Open Data (Federal)'),
                         ('non-federal', 'Project Open Data (Non-Federal)'),
                     ]
+
+
+def clean_tags(tags):
+    ret = []
+    pattern = re.compile('[^A-Za-z0-9\s_\-!?]+')
+    
+    for tag in tags:
+        tag = pattern.sub('', tag).strip()
+        if len(tag) > MAX_TAG_LENGTH:
+            log.error('tag is long, cutting: {}'.format(tag))
+            tag = tag[:MAX_TAG_LENGTH]
+        elif len(tag) < MIN_TAG_LENGTH:
+            log.error('tag is short: {}'.format(tag))
+            tag += '_' * (MIN_TAG_LENGTH - len(tag))
+        if tag != '':
+            ret.append(tag.lower().replace(' ', '-'))  # copyin CKAN behaviour
+    return ret
+
 
 def validate_schema(schema):
     if schema not in [s[0] for s in VALIDATION_SCHEMA]:
@@ -161,6 +182,7 @@ class DatasetHarvesterBase(HarvesterBase):
         # Added: mark all existing parent datasets.
         existing_datasets = { }
         existing_parents = { }
+        log.info('Reading previously harvested packages from this source')
         for hobj in model.Session.query(HarvestObject).filter_by(source=harvest_job.source, current=True):
             try:
                 pkg = get_action('package_show')(self.context(), { "id": hobj.package_id })
@@ -170,7 +192,10 @@ class DatasetHarvesterBase(HarvesterBase):
             sid = self.find_extra(pkg, "identifier")
             is_parent = self.find_extra(pkg, "collection_metadata")
             if sid:
+                log.info('Identifier: {} (ID:{})'.format(sid, pkg['id']))
                 existing_datasets[sid] = pkg
+            else:
+                log.info('The dataset has no identifier:{}'.format(pkg))
             if is_parent and pkg.get("state") == "active":
                 existing_parents[sid] = pkg
 
@@ -291,9 +316,11 @@ class DatasetHarvesterBase(HarvesterBase):
                     and dataset['identifier'] not in existing_parents_demoted \
                     and dataset['identifier'] not in existing_datasets_promoted \
                     and self.find_extra(pkg, "source_hash") == self.make_upstream_content_hash(dataset, harvest_job.source, catalog_extras, schema_version):
+                    log.info('Package {} don\'t need update. Leave'.format(pkg['id']))
                     continue
             else:
                 pkg_id = uuid.uuid4().hex
+                log.info('Package (identifier:{}) is new, it will be created as {}'.format(dataset['identifier'], pkg_id))
 
             # Create a new HarvestObject and store in it the GUID of the
             # existing dataset (if it exists here already) and the dataset's
@@ -484,29 +511,30 @@ class DatasetHarvesterBase(HarvesterBase):
             "title": "title",
             "description": "notes",
             "keyword": "tags",
-            "modified": "extras__modified", # ! revision_timestamp
-            "publisher": "extras__publisher", # !owner_org
-            "contactPoint": {"fn":"maintainer", "hasEmail":"maintainer_email"},
-            "identifier": "extras__identifier", # !id
-            "accessLevel": "extras__accessLevel",
+            "modified": "modified", # ! revision_timestamp
+            "publisher": {"name": "publisher"}, # !owner_org
+            "contactPoint": {"fn":"contact_name", "hasEmail":"contact_email"},
+            # for USMetadata "identifier": "unique_id", # !id
+            "identifier": "extras__identifier",
+            "accessLevel": "public_access_level",
 
-            "bureauCode": "extras__bureauCode",
-            "programCode": "extras__programCode",
+            "bureauCode": "bureau_code[]",
+            "programCode": "program_code[]",
             "rights": "extras__rights",
-            "license": "extras__license", # !license_id
-            "spatial": "extras__spatial", # Geometry not valid GeoJSON, not indexing
-            "temporal": "extras__temporal",
+            "license": "license_id", # !license_id
+            "spatial": "spatial", # Geometry not valid GeoJSON, not indexing
+            "temporal": "temporal",
 
             "theme": "extras__theme",
-            "dataDictionary": "extras__dataDictionary", # !data_dict
-            "dataQuality": "extras__dataQuality",
-            "accrualPeriodicity":"extras__accrualPeriodicity",
-            "landingPage": "extras__landingPage",
-            "language": "extras__language",
-            "primaryITInvestmentUII": "extras__primaryITInvestmentUII", # !PrimaryITInvestmentUII
+            "dataDictionary": "data_dictionary", # !data_dict
+            "dataQuality": "data_quality",
+            "accrualPeriodicity":"accrual_periodicity",
+            "landingPage": "homepage_url",
+            "language": "language[]",
+            "primaryITInvestmentUII": "primary_it_investment_uii", # !PrimaryITInvestmentUII
             "references": "extras__references",
             "issued": "extras__issued",
-            "systemOfRecords": "extras__systemOfRecords",
+            "systemOfRecords": "system_of_records",
 
             "distribution": None,
         }
@@ -653,7 +681,16 @@ class DatasetHarvesterBase(HarvesterBase):
         # fix for accrual_periodicity
         if 'accrual_periodicity' in pkg:
             ap = pkg['accrual_periodicity']
-            pkg['accrual_periodicity'] = reverse_accrual_periodicity_dict.get(ap, ap)
+            pkg['accrual_periodicity'] = \
+                reverse_accrual_periodicity_dict.get(ap, ap)
+        
+        # fix for tag_string
+        if 'tags' in pkg:
+            tags = pkg['tags']
+            log.info('Tags: {}'.format(tags))
+            cleaned_tags = clean_tags(tags)
+            tag_string = ', '.join(cleaned_tags)
+            pkg['tag_string'] = tag_string
 
         # pick a fix number of unmapped entries and put into extra
         log.debug('import fix umapped extras harvest_object=%s', harvest_object.id)
@@ -706,7 +743,7 @@ class DatasetHarvesterBase(HarvesterBase):
             
             log.warn('updating package %s (%s) from %s' % (pkg["name"], pkg["id"], harvest_object.source.url))
             pkg = get_action('package_update')(self.context(), pkg)
-            log.info('import result=update harveset_object=%s', harvest_object.id)
+            log.info('Package updated {}'.format(pkg))
         else:
             # It doesn't exist yet. Create a new one.
             pkg['name'] = self.make_package_name(dataset_processed["title"], harvest_object.guid)
@@ -723,6 +760,7 @@ class DatasetHarvesterBase(HarvesterBase):
             except:
                 log.error('failed to create package %s from %s' % (pkg["name"], harvest_object.source.url))
                 raise
+            log.info('Package created {}'.format(pkg))
 
             log.info('import result=create harveset_object=%s', harvest_object.id)
 

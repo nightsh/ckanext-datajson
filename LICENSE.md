@@ -4,6 +4,16 @@ This project constitutes a work of the United States Government and is not subje
 
 All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest. See [CONTRIBUTING](CONTRIBUTING.md) for more information. 
 
+## GNU General Public License
+
+This project utilizes code [licensed under the terms of the GNU General Public License](https://wordpress.org/about/gpl/) and therefore is licensed under GPL v2 or later.
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+Visit http://www.gnu.org/licenses/ to learn more about the GNU General Public License.
+
 ## Other Information
 
 In no way are the patent or trademark rights of any person affected by CC0, nor are the rights that other persons may have in the work or in how the work is used, such as publicity or privacy rights.
