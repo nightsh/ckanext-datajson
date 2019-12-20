@@ -128,6 +128,25 @@ def get_export_map_json(map_filename):
     return json_export_map
 
 
+def get_data_processor_json(filename):
+    """
+    Reading json data processor from file
+    :param filename: str
+    :return: obj
+    """
+    import os
+
+    path = os.path.join(os.path.dirname(__file__), 'data_processors', filename)
+
+    if not os.path.isfile(path):
+        log.warn("Could not find %s ! Please create it. Use samples from same folder", path)
+        path = os.path.join(os.path.dirname(__file__), 'export_map', 'export.catalog.map.sample.json')
+
+    with open(path, 'r') as data:
+        data_json = json.load(data, object_pairs_hook=OrderedDict)
+
+    return data_json
+
 def detect_publisher(extras):
     """
     Detect publisher by package extras

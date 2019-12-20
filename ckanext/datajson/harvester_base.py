@@ -13,14 +13,14 @@ from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError,
                                     HarvestObjectError, HarvestObjectExtra
 from ckanext.harvest.harvesters.base import HarvesterBase
 
-import uuid, datetime, hashlib, urllib2, json, yaml, json, os
+import uuid, datetime, hashlib, urllib2, json, json, os
 
 from jsonschema.validators import Draft4Validator
 from jsonschema import FormatChecker
 
 from sqlalchemy.exc import IntegrityError
 
-from .helpers import reverse_accrual_periodicity_dict
+from ckanext.datajson.helpers import reverse_accrual_periodicity_dict, get_data_processor_json
 
 import logging
 log = logging.getLogger(__name__)
@@ -71,21 +71,20 @@ class DatasetHarvesterBase(HarvesterBase):
     def validate_config(self, config):
         if not config:
             return config
-        config_obj = yaml.load(config)
+        config_obj = json.load(config)
         return config
 
     def load_config(self, harvest_source):
-        # Load the harvest source's configuration data. We expect it to be a YAML
-        # string. Unfortunately I went ahead of CKAN on this. The stock CKAN harvester
-        # only allows JSON in the configuration box. My fork is necessary for this
-        # to work: https://github.com/joshdata/ckanext-harvest
+        # Load the harvest source's configuration data. 
 
         ret = {
-            "filters": { }, # map data.json field name to list of values one of which must be present
-            "defaults": { }, # map field name to value to supply as default if none exists, handled by the actual importer module, so the field names may be arbitrary
+            "filters": {},  # map data.json field name to list of values one of which must be present
+            "defaults": {},  # map field name to value to supply as default if none exists, handled by the actual importer module, so the field names may be arbitrary
+            "organization_from": "harvest_source",  # use the harvest source org as the dataset org
+            "mapping_fields": None,  # json file with mapping fields (different from different schemas). Default GSA's
         }
 
-        source_config = yaml.load(harvest_source.config)
+        source_config = json.load(harvest_source.config)
 
         try:
             ret["filters"].update(source_config["filters"])
@@ -149,8 +148,7 @@ class DatasetHarvesterBase(HarvesterBase):
             "https://project-open-data.cio.gov/v1.1/schema": '1.1',
             }
 
-        # schema version is default 1.0, or a valid one (1.1, ...)
-        schema_version = '1.0'
+        schema_version = '1.1'
         parent_identifiers = set()
         child_identifiers = set()
         catalog_extras = {}
@@ -161,7 +159,7 @@ class DatasetHarvesterBase(HarvesterBase):
                     ' The given value is %s.' % ('empty' if schema_value == ''
                     else schema_value), harvest_job)
                 return []
-            schema_version = DATAJSON_SCHEMA.get(schema_value, '1.0')
+            schema_version = DATAJSON_SCHEMA.get(schema_value, '1.1')
 
             for dataset in source_datasets:
                 parent_identifier = dataset.get('isPartOf')
@@ -429,7 +427,7 @@ class DatasetHarvesterBase(HarvesterBase):
 
         log.debug('import load extras harvest_object=%s', harvest_object.id)
         dataset = json.loads(harvest_object.content)
-        schema_version = '1.0' # default to '1.0'
+        schema_version = '1.1'
         is_collection = False
         parent_pkg_id = ''
         catalog_extras = {}
@@ -462,101 +460,46 @@ class DatasetHarvesterBase(HarvesterBase):
                 log.info('import result=parent_not_found harvest_object=%s', harvest_object.id)
                 return None
 
+        # get the config
+        config = self.load_config(harvest_object.source)
         # Get default values.
-        dataset_defaults = self.load_config(harvest_object.source)["defaults"]
+        dataset_defaults = config["defaults"]
 
-        source_config = json.loads(harvest_object.source.config or '{}')
-        validator_schema = source_config.get('validator_schema')
+        # base mapping fields
+        if schema_version == '1.1':
+            mapping_config = get_data_processor_json(filename='default.json')
+        elif schema_version == '1.0':
+            mapping_config = get_data_processor_json(filename='default_1_0.json')
+        
+        # for clients with different data schemas we can define different "mapping_fields"
+        mapping_fields_file = config.get('mapping_fields', None)
+        
+        if mapping_fields_file is not None:
+            mapping_update = get_data_processor_json(filename=mapping_fields_file)
+            mapping_config['mapping_fields'].update(mapping_update)
+            
+        # relation between previos fields
+        mapping = mapping_config['mapping_fields']
+        
+        validator_schema = config.get('validator_schema')
         if schema_version == '1.0' and validator_schema != 'non-federal':
             lowercase_conversion = True
         else:
             lowercase_conversion = False
 
-        MAPPING = {
-            "title": "title",
-            "description": "notes",
-            "keyword": "tags",
-            "modified": "extras__modified", # ! revision_timestamp
-            "publisher": "extras__publisher", # !owner_org
-            "contactPoint": "maintainer",
-            "mbox": "maintainer_email",
-            "identifier": "extras__identifier", # !id
-            "accessLevel": "extras__accessLevel",
-
-            "bureauCode": "extras__bureauCode",
-            "programCode": "extras__programCode",
-            "accessLevelComment": "extras__accessLevelComment",
-            "license": "extras__license", # !license_id 
-            "spatial": "extras__spatial", # Geometry not valid GeoJSON, not indexing
-            "temporal": "extras__temporal",
-
-            "theme": "extras__theme",
-            "dataDictionary": "extras__dataDictionary", # !data_dict
-            "dataQuality": "extras__dataQuality",
-            "accrualPeriodicity":"extras__accrualPeriodicity",
-            "landingPage": "extras__landingPage",
-            "language": "extras__language",
-            "primaryITInvestmentUII": "extras__primaryITInvestmentUII", # !PrimaryITInvestmentUII
-            "references": "extras__references",
-            "issued": "extras__issued",
-            "systemOfRecords": "extras__systemOfRecords",
-
-            "accessURL": None,
-            "webService": None,
-            "format": None,
-            "distribution": None,
-        }
-
-        MAPPING_V1_1 = {
-            "title": "title",
-            "description": "notes",
-            "keyword": "tags",
-            "modified": "modified", # ! revision_timestamp
-            "publisher": {"name": "publisher"}, # !owner_org
-            "contactPoint": {"fn":"contact_name", "hasEmail":"contact_email"},
-            # for USMetadata "identifier": "unique_id", # !id
-            "identifier": "extras__identifier",
-            "accessLevel": "public_access_level",
-
-            "bureauCode": "bureau_code[]",
-            "programCode": "program_code[]",
-            "rights": "extras__rights",
-            "license": "license_id", # !license_id
-            "spatial": "spatial", # Geometry not valid GeoJSON, not indexing
-            "temporal": "temporal",
-
-            "theme": "extras__theme",
-            "dataDictionary": "data_dictionary", # !data_dict
-            "dataQuality": "data_quality",
-            "accrualPeriodicity":"accrual_periodicity",
-            "landingPage": "homepage_url",
-            "language": "language[]",
-            "primaryITInvestmentUII": "primary_it_investment_uii", # !PrimaryITInvestmentUII
-            "references": "extras__references",
-            "issued": "extras__issued",
-            "systemOfRecords": "system_of_records",
-
-            "distribution": None,
-        }
-
-        SKIP = ["accessURL", "webService", "format", "distribution"] # will go into pkg["resources"]
-        # also skip the processed_how key, it was added to indicate how we processed the dataset.
-        SKIP.append("processed_how")
-
-        SKIP_V1_1 = ["@type", "isPartOf", "distribution"]
-        SKIP_V1_1.append("processed_how")
+        skip = mapping_config['skip']
 
         if lowercase_conversion:
             log.debug('import lowecase conversion harvest_object=%s', harvest_object.id)
 
             mapping_processed = {}
-            for k,v in MAPPING.items():
+            for k, v in mapping.items():
                 mapping_processed[k.lower()] = v
 
-            skip_processed = [k.lower() for k in SKIP]
+            skip_processed = [k.lower() for k in skip]
 
             dataset_processed = {'processed_how': ['lowercase']}
-            for k,v in dataset.items():
+            for k, v in dataset.items():
               if k.lower() in mapping_processed.keys():
                 dataset_processed[k.lower()] = v
               else:
@@ -574,12 +517,8 @@ class DatasetHarvesterBase(HarvesterBase):
                 dataset_processed['distribution'].append(d_lower)
         else:
             dataset_processed = dataset
-            mapping_processed = MAPPING
-            skip_processed = SKIP
-
-        if schema_version == '1.1':
-            mapping_processed = MAPPING_V1_1
-            skip_processed = SKIP_V1_1
+            mapping_processed = mapping
+            skip_processed = skip
 
         log.debug('import validation harvest_object=%s', harvest_object.id)
         validate_message = self._validate_dataset(validator_schema,
@@ -594,12 +533,16 @@ class DatasetHarvesterBase(HarvesterBase):
         log.debug('import set owner_org harvest_object=%s', harvest_object.id)
         owner_org = None
         source_dataset = model.Package.get(harvest_object.source.id)
-        if source_dataset.owner_org:
+
+        # define wich organization to use, default the harvest source org
+        org_from = config["organization_from", "harvest_source"]
+        if org_from == 'harvest_source':
+            owner_org = source_dataset.owner_org
+        elif org_from == 'publisher':
+            # TODO https://github.com/datopian/ckanext-datajson/issues/4
             owner_org = source_dataset.owner_org
 
-
-        source_config = json.loads(harvest_object.source.config or '{}')
-        group_name = source_config.get('default_groups', '')
+        group_name = config.get('default_groups', '')
 
         # Assemble basic information about the dataset.
 
@@ -719,6 +662,7 @@ class DatasetHarvesterBase(HarvesterBase):
 
         # Set specific information about the dataset.
         log.debug('import set_dataset_info harvest_object=%s', harvest_object.id)
+        # Each harvester implements final changes in this package
         self.set_dataset_info(pkg, dataset_processed, dataset_defaults, schema_version)
     
         # Try to update an existing package with the ID set in harvest_object.guid. If that GUID
