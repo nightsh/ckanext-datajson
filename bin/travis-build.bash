@@ -9,6 +9,7 @@ sudo apt-get update -qq
 sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql postgresql-contrib
 
 pip install setuptools -U
+pip install wheel
 
 # if [ $CKANVERSION == '2.8' ]
 # then
