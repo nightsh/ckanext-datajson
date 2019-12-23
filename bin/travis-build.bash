@@ -10,7 +10,6 @@ sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql 
 
 echo "Extra pips ..."
 pip install setuptools -U
-pip install wheel
 pip install Pylons
 
 echo "-----------------------------------------------------------------"
@@ -30,16 +29,19 @@ then
 	git clone https://github.com/ckan/ckan.git
 	cd ckan
 	git checkout release-v2.3
+	pip install wheel
 elif [ $CKANVERSION == 'inventory' ]
 then
 	git clone https://github.com/GSA/ckan.git
 	cd ckan
 	git checkout inventory
+	pip install wheel
 elif [ $CKANVERSION == 'datagov' ]
 then
 	git clone https://github.com/GSA/ckan.git
 	cd ckan
 	git checkout datagov
+	pip install wheel
 fi
 
 echo "Setup CKAN"
