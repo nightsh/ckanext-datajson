@@ -11,7 +11,7 @@ sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql 
 echo "Extra pips ..."
 pip install --upgrade pip
 pip install setuptools -U
-pip install --upgrade paste
+pip install Paste>=3.0
 pip install wheel
 pip install Pylons
 
@@ -33,28 +33,34 @@ ls -la
 
 if [ $CKANVERSION == '2.8' ]
 then
-	git clone https://github.com/ckan/ckan
+	git clone https://github.com/ckan/ckan.git
 	cd ckan
 	git checkout 2.8
 elif [ $CKANVERSION == '2.3' ]
 then
-	git clone https://github.com/ckan/ckan
+	git clone https://github.com/ckan/ckan.git
 	cd ckan
 	git checkout release-v2.3
 elif [ $CKANVERSION == 'inventory' ]
 then
-	git clone https://github.com/GSA/ckan
+	git clone https://github.com/GSA/ckan.git
 	cd ckan
 	git checkout inventory
 elif [ $CKANVERSION == 'datagov' ]
 then
-	git clone https://github.com/GSA/ckan
+	git clone https://github.com/GSA/ckan.git
 	cd ckan
 	git checkout datagov
 fi
+
+echo "Setup CKAN"
 python setup.py develop
 cp ./ckan/public/base/css/main.css ./ckan/public/base/css/main.debug.css
+
+echo "Installing CKAN requirements..."
 pip install -r requirements.txt
+
+echo "Installing CKAN dev-requirements..."
 pip install -r dev-requirements.txt
 
 cd ..
