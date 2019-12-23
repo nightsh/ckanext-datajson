@@ -4,14 +4,10 @@ jobs:
     working_directory: ~/ckanext-datajson
     machine:
       image: circleci/classic:201708-01
-      # image: circleci/postgres:9.6-alpine
     environment:
       CKANVERSION=2.8
     steps:
       - checkout
-      - run:
-          name: where am I
-          command: pwd && ls -la
       - run:
           name: install
           command: bin/travis-build.bash
@@ -23,7 +19,6 @@ jobs:
     working_directory: ~/ckanext-datajson
     machine:
       image: circleci/classic:201708-01
-      # image: circleci/postgres:9.6-alpine
     environment:
       CKANVERSION=2.3
     steps:
@@ -81,6 +76,6 @@ workflows:
   build_and_test:
     jobs:
       - build_ckan_28
-      - build_ckan_23
-      - build_gsa_ckan_inventory
-      - build_gsa_ckan_datagov
+      # - build_ckan_23
+      # - build_gsa_ckan_inventory
+      # - build_gsa_ckan_datagov

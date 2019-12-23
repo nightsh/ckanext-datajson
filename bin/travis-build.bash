@@ -6,17 +6,10 @@ echo "This is travis-build.bash..."
 echo "-----------------------------------------------------------------"
 echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
-sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql postgresql-contrib
+sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql postgresql-contrib python-lxml postgresql-9.3-postgis-2.1
 
+echo "Extra pips ..."
 pip install setuptools -U
-
-# if [ $CKANVERSION == '2.8' ]
-# then
-# 	sudo apt-get install postgresql-9.6
-# elif [ $CKANVERSION == '2.3' ]
-# then
-# 	sudo apt-get install postgresql-9.1
-# fi
 
 echo "-----------------------------------------------------------------"
 echo "Installing CKAN and its Python dependencies..."
@@ -25,31 +18,39 @@ cd .. # CircleCI starts inside ckanext-datajson folder
 pwd
 ls -la
 
-
 if [ $CKANVERSION == '2.8' ]
 then
-	git clone https://github.com/ckan/ckan
+	git clone https://github.com/ckan/ckan.git
 	cd ckan
-	git checkout master
+	git checkout 2.8
 elif [ $CKANVERSION == '2.3' ]
 then
-	git clone https://github.com/ckan/ckan
+	git clone https://github.com/ckan/ckan.git
 	cd ckan
 	git checkout release-v2.3
+	pip install wheel
 elif [ $CKANVERSION == 'inventory' ]
 then
-	git clone https://github.com/GSA/ckan
+	git clone https://github.com/GSA/ckan.git
 	cd ckan
 	git checkout inventory
+	pip install wheel
 elif [ $CKANVERSION == 'datagov' ]
 then
-	git clone https://github.com/GSA/ckan
+	git clone https://github.com/GSA/ckan.git
 	cd ckan
 	git checkout datagov
+	pip install wheel
 fi
+
+echo "Setup CKAN"
 python setup.py develop
 cp ./ckan/public/base/css/main.css ./ckan/public/base/css/main.debug.css
+
+echo "Installing CKAN requirements..."
 pip install -r requirements.txt
+
+echo "Installing CKAN dev-requirements..."
 pip install -r dev-requirements.txt
 
 cd ..

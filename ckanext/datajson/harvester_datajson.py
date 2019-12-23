@@ -86,8 +86,8 @@ class DataJsonHarvester(DatasetHarvesterBase):
         
     def set_dataset_info(self, pkg, dataset, dataset_defaults, schema_version):
         parse_datajson_entry(dataset, pkg, dataset_defaults, schema_version)
-        # parse_datajson_entry_for_dep_of_ed_schema(dataset, pkg, dataset_defaults, schema_version)
-
+  
+        
 # helper function to remove BOM
 def lstrip_bom(str_):
     from codecs import BOM_UTF8

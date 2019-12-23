@@ -1,0 +1,20 @@
+{
+    "keyword": "tag_string[]",
+    "modified": "modified",
+    "publisher": "publisher",
+    "contactPoint": {"fn":"contact_name", "hasEmail":"contact_email"},
+    "identifier": "unique_id",
+    "accessLevel": "public_access_level",
+    "bureauCode": "bureau_code[]",
+    "programCode": "program_code[]",
+    "license": "license_id",
+    "spatial": "spatial",
+    "temporal": "temporal",
+    "dataDictionary": "data_dictionary",
+    "dataQuality": "data_quality",
+    "accrualPeriodicity":"accrual_periodicity",
+    "landingPage": "homepage_url",
+    "language": "language[]",
+    "primaryITInvestmentUII": "primary_it_investment_uii",
+    "systemOfRecords": "system_of_records"
+}
