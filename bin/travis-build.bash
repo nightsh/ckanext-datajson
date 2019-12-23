@@ -10,6 +10,7 @@ sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql 
 
 pip install setuptools -U
 pip install wheel
+pip install Pylons
 
 # if [ $CKANVERSION == '2.8' ]
 # then
@@ -31,7 +32,7 @@ if [ $CKANVERSION == '2.8' ]
 then
 	git clone https://github.com/ckan/ckan
 	cd ckan
-	git checkout master
+	git checkout 2.8
 elif [ $CKANVERSION == '2.3' ]
 then
 	git clone https://github.com/ckan/ckan
