@@ -10,7 +10,6 @@ sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql 
 
 echo "Extra pips ..."
 pip install setuptools -U
-pip install Pylons
 
 echo "-----------------------------------------------------------------"
 echo "Installing CKAN and its Python dependencies..."
