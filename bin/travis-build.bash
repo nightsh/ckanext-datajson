@@ -6,22 +6,12 @@ echo "This is travis-build.bash..."
 echo "-----------------------------------------------------------------"
 echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
-sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql postgresql-contrib
+sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql postgresql-contrib python-lxml postgresql-9.3-postgis-2.1
 
 echo "Extra pips ..."
-pip install --upgrade pip
 pip install setuptools -U
-pip install Paste>=3.0
 pip install wheel
 pip install Pylons
-
-# if [ $CKANVERSION == '2.8' ]
-# then
-# 	sudo apt-get install postgresql-9.6
-# elif [ $CKANVERSION == '2.3' ]
-# then
-# 	sudo apt-get install postgresql-9.1
-# fi
 
 echo "-----------------------------------------------------------------"
 echo "Installing CKAN and its Python dependencies..."
@@ -29,7 +19,6 @@ echo "Installing CKAN and its Python dependencies..."
 cd .. # CircleCI starts inside ckanext-datajson folder
 pwd
 ls -la
-
 
 if [ $CKANVERSION == '2.8' ]
 then
