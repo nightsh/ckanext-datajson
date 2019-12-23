@@ -8,8 +8,10 @@ echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
 sudo apt-get install solr-jetty libcommons-fileupload-java libpq-dev postgresql postgresql-contrib
 
+echo "Extra pips ..."
 pip install --upgrade pip
 pip install setuptools -U
+pip install --upgrade paste
 pip install wheel
 pip install Pylons
 
