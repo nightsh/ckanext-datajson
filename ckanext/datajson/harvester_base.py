@@ -71,7 +71,7 @@ class DatasetHarvesterBase(HarvesterBase):
     def validate_config(self, config):
         if not config:
             return config
-        config_obj = json.load(config)
+        config_obj = json.loads(config)
         return config
 
     def load_config(self, harvest_source):
