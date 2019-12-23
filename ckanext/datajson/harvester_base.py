@@ -537,7 +537,7 @@ class DatasetHarvesterBase(HarvesterBase):
         source_dataset = model.Package.get(harvest_object.source.id)
 
         # define wich organization to use, default the harvest source org
-        org_from = config["organization_from", "harvest_source"]
+        org_from = config.get("organization_from", "harvest_source")
         if org_from == 'harvest_source':
             owner_org = source_dataset.owner_org
         elif org_from == 'publisher':
