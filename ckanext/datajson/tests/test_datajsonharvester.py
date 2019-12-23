@@ -144,13 +144,13 @@ class TestDataJSONHarvester(object):
                 assert 'financial-reports' in tags
                 assert 'ovaes-gpra-goals-for-adult-education' in tags
                 # "keyword": [ "Annual Performance Report", "Financial Reports", "OVAE's GPRA goals for adult education", "Adult literacy"],
-                expected_tag_string = 'Annual Performance Report, Financial Reports, OVAEs GPRA goals for adult education, Adult literacy'
+                expected_tag_string = 'annual-performance-report, financial-reports, ovaes-gpra-goals-for-adult-education, adult-literacy'
                 assert dataset.tag_string == expected_tag_string
 
             if dataset.title == 'Academic Libraries Survey, 2010':
                 log.info('Found: Academic Libraries Survey, 2010')
                 # "keyword": [ "Research libraries", "Research librarians", "University libraries", "College libraries", "University librarians", "College librarians" ],
-                expected_tag_string = 'Research libraries, Research librarians, University libraries, College libraries, University librarians, College librarians'
+                expected_tag_string = 'research-libraries, research-librarians, university-libraries, college-libraries, university-librarians, college-librarians'
                 assert dataset.tag_string == expected_tag_string
 
     def test_ssl_fail(self):

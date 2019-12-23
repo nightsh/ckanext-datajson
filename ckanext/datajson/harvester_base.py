@@ -44,7 +44,7 @@ def clean_tags(tags):
             log.error('tag is short: {}'.format(tag))
             tag += '_' * (MIN_TAG_LENGTH - len(tag))
         if tag != '':
-            ret.append(tag.lower().replace(' ', '-'))  # copyin CKAN behaviour
+            ret.append(tag.lower().replace(' ', '-'))  # copying CKAN behaviour
     return ret
 
 
