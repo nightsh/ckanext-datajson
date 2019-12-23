@@ -218,6 +218,7 @@ def publisher_to_org(publisher_name, context):
     try:
         org = get_action('organization_show')(context, {'id': name})
     except NotFound:
+        context.pop('__auth_audit', None)
         log.error('Publisher as ORG not found. Creating')    
         org_base = {'title': publisher_name, 'name': name}
         check_access('organization_create', context, org_base)
