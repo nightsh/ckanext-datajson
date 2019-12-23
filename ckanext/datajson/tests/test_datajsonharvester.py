@@ -155,7 +155,13 @@ class TestDataJSONHarvester(object):
 
     def test_ssl_fail(self):
         url = 'http://127.0.0.1:%s/ssl-certificate-error' % mock_datajson_source.PORT
+        # first time error
         log.info('Testing SSL error')
+        with assert_raises(URLError) as harvest_context:
+            for harvest_object, result, dataset in self.run_source(url=url):
+                pass
+        
+        # second time we send the SSL context
         for harvest_object, result, dataset in self.run_source(url=url, limit=20):
             log.info('Dataset: {}'.format(dataset))
             tags = [tag.name for tag in dataset.get_tags()]

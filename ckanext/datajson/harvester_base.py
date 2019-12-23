@@ -84,7 +84,8 @@ class DatasetHarvesterBase(HarvesterBase):
             "mapping_fields": None,  # json file with mapping fields (different from different schemas). Default GSA's
         }
 
-        source_config = json.load(harvest_source.config)
+        cfg = harvest_source.config or '{}'
+        source_config = json.loads(cfg)
 
         try:
             ret["filters"].update(source_config["filters"])
@@ -212,7 +213,8 @@ class DatasetHarvesterBase(HarvesterBase):
         # first, mark the status in harvest_source config, which
         # triggers a children harvest_job after parents job is finished.
         source = harvest_job.source
-        source_config = json.loads(source.config or '{}')
+        source_config = self.load_config(source)
+        
         # run status: None, or parents_run, or children_run?
         run_status = source_config.get('datajson_collection')
         if parent_identifiers:
@@ -261,7 +263,7 @@ class DatasetHarvesterBase(HarvesterBase):
         seen_datasets = set()
         unique_datasets = set()
         
-        filters = self.load_config(harvest_job.source)["filters"]
+        filters = source_config["filters"]
 
         for dataset in source_datasets:
             # Create a new HarvestObject for this dataset and save the
