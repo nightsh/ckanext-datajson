@@ -8,6 +8,8 @@ import logging
 from pylons import config
 from ckan import plugins as p
 from ckan.lib import helpers as h
+from ckan.logic import NotFound, get_action, check_access
+from ckan.lib.munge import munge_title_to_name
 import re
 import simplejson as json
 
@@ -205,6 +207,24 @@ def get_extra(package, key, default=None):
     Retrieves the value of an extras field.
     """
     return packageExtraCache.get(package, key, default)
+
+
+def publisher_to_org(publisher_name, context):
+    """ create (if not exists) an organization from a publisher """
+    
+    name = munge_title_to_name(publisher_name).replace('_', '-')
+    check_access('organization_show', context, {'id': name})
+
+    try:
+        org = get_action('organization_show')(context, {'id': name})
+    except NotFound:
+        log.error('Publisher as ORG not found. Creating')    
+        org_base = {'title': publisher_name, 'name': name}
+        check_access('organization_create', context, org_base)
+        org = get_action('organization_create')(context, org_base)
+
+    log.info('Pub: {} to org: {}'.format(publisher_name, org))
+    return org
 
 
 class PackageExtraCache:

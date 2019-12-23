@@ -20,7 +20,9 @@ from jsonschema import FormatChecker
 
 from sqlalchemy.exc import IntegrityError
 
-from ckanext.datajson.helpers import reverse_accrual_periodicity_dict, get_data_processor_json
+from ckanext.datajson.helpers import reverse_accrual_periodicity_dict, \
+                                     get_data_processor_json, \
+                                     publisher_to_org
 
 import logging
 log = logging.getLogger(__name__)
@@ -86,20 +88,7 @@ class DatasetHarvesterBase(HarvesterBase):
 
         cfg = harvest_source.config or '{}'
         source_config = json.loads(cfg)
-
-        try:
-            ret["filters"].update(source_config["filters"])
-        except TypeError:
-            pass
-        except KeyError:
-            pass
-
-        try:
-            ret["defaults"].update(source_config["defaults"])
-        except TypeError:
-            pass
-        except KeyError:
-            pass
+        ret.update(source_config)
 
         return ret
 
@@ -464,6 +453,7 @@ class DatasetHarvesterBase(HarvesterBase):
 
         # get the config
         config = self.load_config(harvest_object.source)
+        log.info('Config used: {}'.format(config))
         # Get default values.
         dataset_defaults = config["defaults"]
 
@@ -541,8 +531,17 @@ class DatasetHarvesterBase(HarvesterBase):
         if org_from == 'harvest_source':
             owner_org = source_dataset.owner_org
         elif org_from == 'publisher':
-            # TODO https://github.com/datopian/ckanext-datajson/issues/4
-            owner_org = source_dataset.owner_org
+            # if we have a publisher we use as Organization, If not, we use the standard harvest source org
+            # TODO analyze if config "remote_orgs" could be useful here
+            publisher = dataset.get('publisher', {})
+            publisher_name = publisher.get('name', None)
+            if publisher_name is not None:
+                log.info('Publisher found: {}'.format(publisher))
+                org = publisher_to_org(publisher_name, self.context())
+                owner_org = org['id']
+            else:
+                log.error('No publisher, default to harvest source org')
+                owner_org = source_dataset.owner_org
 
         group_name = config.get('default_groups', '')
 

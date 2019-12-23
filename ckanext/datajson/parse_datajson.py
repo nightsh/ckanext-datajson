@@ -13,7 +13,7 @@ def parse_datajson_entry(datajson, package, defaults, schema_version):
     log.info('Parsing datajson entry: {}'.format(package))
 
     # set the default values
-    for k, v in defaults:
+    for k, v in defaults.items():
         if k not in package.keys() or package[k] is None:
             package[k] = v
         
@@ -78,6 +78,10 @@ def parse_datajson_entry(datajson, package, defaults, schema_version):
     if package.get("contact_email"):
         package["contact_email"] = \
             package.get("contact_email").replace("mailto:", "", 1)
+
+    if package.get("author_email"):
+        package["author_email"] = \
+            package.get("author_email").replace("mailto:", "", 1)
 
     # 4. extras-publisher and extras-publisher_hierarchy
     if schema_version == '1.1':
