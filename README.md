@@ -162,6 +162,30 @@ that may not be set in the source data.json files, e.g. enter something like thi
 
 This again is tied to the HealthData.gov metadata schema.
 
+
+Harvest source configuration 
+----------------------------
+
+Each harvest source could use a custom configuration.
+
+You could use a custom schema by _mapping fields_ with the `mapping_fields` config value. This value needs a json file in the _data_processors_ folder.  
+If you want to create organizations from _publishers_ you should use the `organization_from` config value set as _"publisher"_. The default value is to use the harvester source organization as a dataset organization.  
+
+
+Example configuration:
+```
+{
+  "defaults": {
+    "private": false,
+    "author": "Unknown author",
+    "author_email": "unknown@email.com",
+    "spatial": "United States"
+  },
+  "mapping_fields": "dep_of_ed.json", 
+  "organization_from": "publisher"
+}
+```
+
 Credit / Copying
 ----------------
 
