@@ -1,0 +1,20 @@
+{% extends "page.html" %}
+
+{% block subtitle %}Harvester versions{% endblock %}
+
+{% block breadcrumb_content %}
+{% endblock %}
+
+{% block primary %}
+  <article class="module">
+    <div class="module-content">
+      <h1>CKANext-DataJSON Harvesters Versions</h1>
+      
+	  <p>Data.json harvester version: {{ c.data_json_harvester_version }}</p>
+	  <p>CMS Data Navigator harvester version: {{ c.cms_harvester_version }}</p>
+	  
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}

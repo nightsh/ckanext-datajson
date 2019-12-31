@@ -11,9 +11,10 @@ import re
 from ckan.lib.base import BaseController, render, c
 from jsonschema.exceptions import best_match
 from pylons import request, response
-
+from logging import getLogger
 from helpers import get_export_map_json, detect_publisher, get_validator
 from package2pod import Package2Pod
+from ckanext.harvest.log import DBLogHandler
 
 logger = logging.getLogger(__name__)
 draft4validator = get_validator()
@@ -28,6 +29,14 @@ class DataJsonPlugin(p.SingletonPlugin):
     p.implements(p.interfaces.IConfigurer)
     p.implements(p.ITemplateHelpers)
     p.implements(p.interfaces.IRoutes, inherit=True)
+
+    def configure(self, config):
+
+        self.startup = True
+        # Configure database logger to save in HarvesterLog
+        _configure_db_logger(config)
+
+        self.startup = False
 
     def update_config(self, config):
         # Must use IConfigurer rather than IConfigurable because only IConfigurer
@@ -91,8 +100,68 @@ class DataJsonPlugin(p.SingletonPlugin):
         # /pod/validate
         m.connect('datajsonvalidator', "/pod/validate",
                   controller='ckanext.datajson.plugin:DataJsonController', action='validator')
-
+        
+        m.connect('harvester_versions', '/harvester_versions', 
+                  controller='ckanext.datajson.plugin:DataJsonController', action='get_versions')
         return m
+
+
+def _configure_db_logger(config):
+    # Log scope
+    #
+    # -1 - do not log to the database
+    #  0 - log everything
+    #  1 - model, logic.action, logic.validators, harvesters
+    #  2 - model, logic.action, logic.validators
+    #  3 - model, logic.action
+    #  4 - logic.action
+    #  5 - model
+    #  6 - plugin
+    #  7 - harvesters
+    #
+    scope = p.toolkit.asint(config.get('ckan.harvest.log_scope', -1))
+    if scope == -1:
+        return
+
+    parent_logger = 'ckanext.datajson'
+    children = ['plugin', 'model', 'logic.action.create', 'logic.action.delete',
+                'logic.action.get',  'logic.action.patch', 'logic.action.update',
+                'logic.validators',
+                'harvester_base', 'helpers',
+                'harvester_cmsdatanavigator',
+                'harvester_datajson', 'parse_datajson']
+
+    children_ = {0: children, 1: children[1:], 2: children[1:-2],
+                 3: children[1:-3], 4: children[2:-3], 5: children[1:2],
+                 6: children[:1], 7: children[-2:]}
+
+    # Get log level from config param - default: DEBUG
+    from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
+    level = config.get('ckan.harvest.log_level', 'debug').upper()
+    if level == 'DEBUG':
+        level = DEBUG
+    elif level == 'INFO':
+        level = INFO
+    elif level == 'WARNING':
+        level = WARNING
+    elif level == 'ERROR':
+        level = ERROR
+    elif level == 'CRITICAL':
+        level = CRITICAL
+    else:
+        level = DEBUG
+
+    loggers = children_.get(scope)
+
+    # Get root logger and set db handler
+    logger = getLogger(parent_logger)
+    if scope < 1:
+        logger.addHandler(DBLogHandler(level=level))
+
+    # Set db handler to all child loggers
+    for _ in loggers:
+        child_logger = logger.getChild(_)
+        child_logger.addHandler(DBLogHandler(level=level))
 
 
 class DataJsonController(BaseController):
@@ -359,6 +428,15 @@ class DataJsonController(BaseController):
         response.content_disposition = 'attachment; filename="%s.zip"' % zip_name
 
         return binary
+
+    def get_versions(self):
+        from ckanext.datajson.harvester_datajson import DataJsonHarvester
+        from ckanext.datajson.harvester_cmsdatanavigator import CmsDataNavigatorHarvester
+        h = DataJsonHarvester()
+        c.data_json_harvester_version = h.HARVESTER_VERSION
+        ch = CmsDataNavigatorHarvester()
+        c.cms_harvester_version = ch.HARVESTER_VERSION
+        return render('get_versions.html')
 
     def validator(self):
         # Validates that a URL is a good data.json file.
