@@ -86,6 +86,10 @@ class DatasetHarvesterBase(HarvesterBase):
             "mapping_fields": None,  # json file with mapping fields (different from different schemas). Default GSA's
         }
 
+        # other
+        # keywords_as_groups: use keywords as groups
+        #   remote_groups: if keywords_as_groups will create groups when do not exist
+
         cfg = harvest_source.config or '{}'
         source_config = json.loads(cfg)
         ret.update(source_config)
@@ -544,13 +548,34 @@ class DatasetHarvesterBase(HarvesterBase):
                 owner_org = source_dataset.owner_org
 
         group_name = config.get('default_groups', '')
+        groups = [{"name": group_name}]
+
+        # If the user want to use keywords as groups (without loosing them as tags) uses keywords_as_groups: True
+        keywords_as_groups = config.get('keywords_as_groups', False)
+
+        if keywords_as_groups:
+            # create remote groups if they don't exists?
+            # Used originally for CKAN harvester sources
+            remote_groups = config.get('remote_groups', False)
+
+            for keyword in dataset.get('keyword', []):
+                group_name = munge_title_to_name(keyword).replace('_', '-')
+                group_base = {"name": group_name}
+                try:
+                    get_action('group_show')(self.context(), group_base)
+                    groups.append({"name": group_name})
+                except NotFound:
+                    if remote_groups:
+                        group_base['title'] = keyword
+                        get_action('group_create')(self.context(), group_base)
+                        groups.append({"name": group_name})
 
         # Assemble basic information about the dataset.
 
         pkg = {
             "state": "active", # in case was previously deleted
             "owner_org": owner_org,
-            "groups": [{"name": group_name}],
+            "groups": groups,
             "resources": [],
             "extras": [
                 {
