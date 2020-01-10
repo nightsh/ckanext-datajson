@@ -565,7 +565,7 @@ class DatasetHarvesterBase(HarvesterBase):
                     get_action('group_show')(self.context(), group_base)
                     groups.append({"name": group_name})
                 except NotFound:
-                    if remote_groups:
+                    if remote_groups == 'create':
                         group_base['title'] = keyword
                         get_action('group_create')(self.context(), group_base)
                         groups.append({"name": group_name})
