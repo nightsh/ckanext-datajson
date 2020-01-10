@@ -171,15 +171,18 @@ Each harvest source could use a custom configuration.
 You could use a custom schema by _mapping fields_ with the `mapping_fields` config value. This value needs a json file in the _data_processors_ folder.  
 If you want to create organizations from _publishers_ you should use the `organization_from` config value set as _"publisher"_. The default value is to use the harvester source organization as a dataset organization.  
 
+If you want a new group for each keyword you should use _keywords_as_groups: true_. If you also set _remote_groups: "create"_ then each keyword/tag will create a group. If not, just the pre-existing groups will be connected with datasets.  
 
 Example configuration:
+
 ```
 {
   "defaults": {
     "private": false,
     "author": "Unknown author",
     "author_email": "unknown@email.com",
-    "spatial": "United States"
+    "spatial": "United States",
+	"keywords_as_groups": true,
   },
   "mapping_fields": "dep_of_ed.json", 
   "organization_from": "publisher"
